@@ -25,16 +25,14 @@
 2. Click **New** → **Web Service**
 3. Connect your `moazzam-ai-backend` GitHub repo
 4. Render auto-configures using `render.yaml`
-5. Add Environment Variable:
-   - Key: `GOOGLE_API_KEY`
-   - Value: [Your Google Gemini API key]
+5. Deploy directly. No API key is required for the simplified FAQ backend.
 
 ### Step 3: Update Frontend to Use Backend
 After backend deploys, Render gives you a URL like: `https://moazzam-ai-backend.onrender.com`
 
-Update `web2/script.js` line ~87:
-```javascript
-const API_BASE = 'https://moazzam-ai-backend.onrender.com';
+Update the API base URL in `web2/index.html`:
+```html
+<meta name="api-base-url" content="https://moazzam-ai-backend.onrender.com">
 ```
 
 Then redeploy to Vercel.
@@ -45,7 +43,7 @@ Then redeploy to Vercel.
 | Part | Platform | Status |
 |------|----------|--------|
 | Website + Images | Vercel | ✅ Ready |
-| AI Chat Backend | Render | ✅ Ready |
+| AI Chat Backend | Render or Replit | ✅ Ready |
 | Video | Upload later | Will auto-display |
 
 Your website + AI agent will stay online 24/7 for FREE!

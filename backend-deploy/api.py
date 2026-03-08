@@ -1,74 +1,8 @@
-from fastapi import FastAPI, HTTPException
+import re
+
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import os
-import sys
-from dotenv import load_dotenv
-import asyncio
-
-# Load environment variables
-load_dotenv()
-
-# Setup API key
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-if GOOGLE_API_KEY:
-    os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
-else:
-    raise ValueError("GOOGLE_API_KEY not set")
-
-import google.generativeai as genai
-
-# Configure genai
-genai.configure(api_key=GOOGLE_API_KEY)
-
-# System prompt with Q&A
-SYSTEM_PROMPT = """You are a helpful AI assistant for Muhammad Moazzam's portfolio. Answer questions about his videography, photography, video editing, digital marketing services, and agentic AI development. Be professional and engaging.
-
-Respond to questions based on the following information and examples:
-
-📸 General & Inquiries
-Question: "What services do you offer, and how do I book you?"
-Answer: "I offer professional Videography, Photography, Video/Photo Editing, and Digital Marketing. I also specialize in Agentic AI development to enhance creative workflows. All services are currently paid. To book or get a detailed quote, please email me directly at muhammad.moazzam635@gmail.com with your project details."
-
-Question: "I saw your portfolio. Can you tell me more about your experience and style?"
-Answer: "Certainly! My approach blends technical skill with a creative, scientific curiosity. I manage my own social media (@mox.shots) and have hands-on experience in the filming industry. My style focuses on authentic storytelling, whether through a lens or a marketing campaign. I also integrate custom AI tools I've built to bring a unique, efficient edge to my creative work."
-
-🎥 Videography & Photography
-Question: "What kind of videography/photography projects do you take on?"
-Answer: "I work on a wide range of projects including events, portraits, brand content, and short cinematic reels. You can see examples of my work on my Instagram: @mox.shots. I'm comfortable both on a film set and handling solo shoots, always aiming to capture compelling visuals."
-
-Question: "Do you travel for shoots, and what are your rates?"
-Answer: "Yes, I am available for travel depending on the project scope. Since every project has different requirements, I prefer to discuss details first. Please email me at muhammad.moazzam635@gmail.com with your location, the type of shoot, and its duration so I can provide an accurate quotation."
-
-✂️ Editing & Post-Production
-Question: "Do you only edit your own footage, or can I send you my raw files to edit?"
-Answer: "I do both! I can edit footage I've captured for you, or you can send me your own raw video and photo files. I specialize in creative video and photo editing to bring your vision to life. Just email me to discuss the scope of the edit."
-
-📈 Digital Marketing
-Question: "What does your digital marketing service include?"
-Answer: "My digital marketing services are designed to help you build and manage your social media presence effectively, similar to how I manage my own pages. This includes content strategy, creation, and scheduling. We can tailor a package to your specific goals. Contact me by email to discuss your needs."
-
-🤖 Agentic AI Development
-Question: "You mentioned 'agentic AI development.' What does that mean for a creative business?"
-Answer: "Great question! I build custom AI agents (like automated assistants) that can enhance creative workflows—for example, helping to generate content ideas, automate editing tasks, or analyze audience engagement. If you have a repetitive task or a creative challenge, I can explore building an AI solution for you. Let's connect via email to discuss the possibilities."
-
-💰 Pricing & Process
-Question: "How much do you charge for [specific service]?"
-Answer: "Pricing depends on the project's complexity, duration, and specific requirements. To give you an accurate quote, please send an email to muhammad.moazzam635@gmail.com with as much detail as possible about what you need."
-
-Question: "What is the typical process for working with you?"
-Answer: "The process is simple:
-
-Inquiry: You email me at muhammad.moazzam635@gmail.com with your project idea.
-
-Consultation: We discuss details, timeline, and budget.
-
-Quote: I provide a formal quotation.
-
-Execution: Upon agreement, we start the creative work!"
-"""
-
-model = genai.GenerativeModel("models/gemini-1.5-flash-002", system_instruction=SYSTEM_PROMPT)
 
 app = FastAPI(title="Moazzam Portfolio AI Assistant")
 
@@ -87,31 +21,139 @@ class QueryRequest(BaseModel):
 class QueryResponse(BaseModel):
     answer: str
 
-# Q&A dictionary with key phrases
-qa_dict = {
-    "what services do you offer": "I offer professional Videography, Photography, Video/Photo Editing, and Digital Marketing. I also specialize in Agentic AI development to enhance creative workflows. All services are currently paid. To book or get a detailed quote, please email me directly at muhammad.moazzam635@gmail.com with your project details.",
-    "portfolio": "Certainly! My approach blends technical skill with a creative, scientific curiosity. I manage my own social media (@mox.shots) and have hands-on experience in the filming industry. My style focuses on authentic storytelling, whether through a lens or a marketing campaign. I also integrate custom AI tools I've built to bring a unique, efficient edge to my creative work.",
-    "videography/photography projects": "I work on a wide range of projects including events, portraits, brand content, and short cinematic reels. You can see examples of my work on my Instagram: @mox.shots. I'm comfortable both on a film set and handling solo shoots, always aiming to capture compelling visuals.",
-    "travel for shoots": "Yes, I am available for travel depending on the project scope. Since every project has different requirements, I prefer to discuss details first. Please email me at muhammad.moazzam635@gmail.com with your location, the type of shoot, and its duration so I can provide an accurate quotation.",
-    "edit your own footage": "I do both! I can edit footage I've captured for you, or you can send me your own raw video and photo files. I specialize in creative video and photo editing to bring your vision to life. Just email me to discuss the scope of the edit.",
-    "digital marketing service": "My digital marketing services are designed to help you build and manage your social media presence effectively, similar to how I manage my own pages. This includes content strategy, creation, and scheduling. We can tailor a package to your specific goals. Contact me by email to discuss your needs.",
-    "agentic ai development": "Great question! I build custom AI agents (like automated assistants) that can enhance creative workflows—for example, helping to generate content ideas, automate editing tasks, or analyze audience engagement. If you have a repetitive task or a creative challenge, I can explore building an AI solution for you. Let's connect via email to discuss the possibilities.",
-    "how much do you charge": "Pricing depends on the project's complexity, duration, and specific requirements. To give you an accurate quote, please send an email to muhammad.moazzam635@gmail.com with as much detail as possible about what you need.",
-    "typical process": "The process is simple:\n\nInquiry: You email me at muhammad.moazzam635@gmail.com with your project idea.\n\nConsultation: We discuss details, timeline, and budget.\n\nQuote: I provide a formal quotation.\n\nExecution: Upon agreement, we start the creative work!"
-}
+FAQ_RESPONSES = [
+    {
+        "patterns": [
+            "what services",
+            "services offer",
+            "what do you do",
+            "what can you do",
+            "book you",
+            "hire you",
+        ],
+        "answer": "I offer professional videography, photography, video and photo editing, digital marketing, and agentic AI development. All services are paid. To book or request a quote, email muhammad.moazzam635@gmail.com with your project details.",
+    },
+    {
+        "patterns": [
+            "experience",
+            "style",
+            "portfolio",
+            "tell me more about yourself",
+            "about you",
+        ],
+        "answer": "My work combines technical skill, scientific curiosity, and visual storytelling. I manage my own social media presence at @mox.shots, have hands-on filming experience, and use custom AI tools to improve creative workflow and efficiency.",
+    },
+    {
+        "patterns": [
+            "videography",
+            "photography",
+            "shoots",
+            "events",
+            "portraits",
+            "brand content",
+        ],
+        "answer": "I take on events, portraits, brand content, short cinematic reels, and other visual storytelling projects. I am comfortable on film sets as well as solo shoots, with a focus on strong composition and compelling visuals.",
+    },
+    {
+        "patterns": [
+            "travel",
+            "location",
+            "available for shoots",
+            "outside city",
+        ],
+        "answer": "Yes, I can travel for projects depending on the scope. Email muhammad.moazzam635@gmail.com with the location, type of shoot, and duration so I can quote accurately.",
+    },
+    {
+        "patterns": [
+            "edit",
+            "raw files",
+            "post production",
+            "video editing",
+            "photo editing",
+        ],
+        "answer": "I can edit both footage I capture and raw files you provide. That includes creative video editing, photo editing, and post-production work tailored to your project goals.",
+    },
+    {
+        "patterns": [
+            "digital marketing",
+            "social media",
+            "content strategy",
+            "marketing",
+        ],
+        "answer": "My digital marketing work focuses on social media strategy, content creation, posting structure, and audience-focused planning. Packages can be tailored around your business goals.",
+    },
+    {
+        "patterns": [
+            "agentic ai",
+            "ai development",
+            "custom ai",
+            "automation",
+            "assistant",
+        ],
+        "answer": "I build custom AI assistants and workflow automations that help creative businesses reduce repetitive work, generate ideas faster, and improve consistency across production and outreach.",
+    },
+    {
+        "patterns": [
+            "price",
+            "pricing",
+            "cost",
+            "rate",
+            "rates",
+            "charge",
+            "quote",
+        ],
+        "answer": "Pricing depends on the project's scope, deliverables, duration, and complexity. The best way to get an accurate quote is to email muhammad.moazzam635@gmail.com with the details of what you need.",
+    },
+    {
+        "patterns": [
+            "process",
+            "how do we work",
+            "workflow",
+            "start a project",
+            "working with you",
+        ],
+        "answer": "The process is straightforward: first you email your project idea, then we discuss scope, timeline, and budget, after that I send a quotation, and once approved the work begins.",
+    },
+    {
+        "patterns": [
+            "contact",
+            "email",
+            "reach you",
+            "instagram",
+        ],
+        "answer": "You can reach me at muhammad.moazzam635@gmail.com, and you can also view more work and updates through my social presence at @mox.shots.",
+    },
+]
+
+
+def normalize_text(value: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", value.lower())).strip()
+
+
+def find_answer(query: str) -> str:
+    normalized_query = normalize_text(query)
+
+    for item in FAQ_RESPONSES:
+        if any(pattern in normalized_query for pattern in item["patterns"]):
+            return item["answer"]
+
+    return (
+        "Thanks for reaching out. I can help with videography, photography, editing, digital marketing, and agentic AI development. "
+        "For anything specific, email muhammad.moazzam635@gmail.com with your project details and I can respond with the right next steps."
+    )
 
 @app.post("/api/chat", response_model=QueryResponse)
 async def chat(request: QueryRequest):
-    query = request.query.lower()
-    for key, a in qa_dict.items():
-        if key in query:
-            return QueryResponse(answer=a)
-    # Default response
-    return QueryResponse(answer="I'm sorry, I don't have a specific answer for that. Please email me at muhammad.moazzam635@gmail.com for more details.")
+    return QueryResponse(answer=find_answer(request.query))
 
 @app.get("/")
 async def root():
     return {"message": "Moazzam Portfolio AI Assistant API"}
+
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     import uvicorn
