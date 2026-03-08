@@ -99,19 +99,9 @@ function setupMotionTypography() {
 
 function setupScrollSpy() {
   const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
-  const statusValue = document.querySelector('.nav-status-value');
-  if (!navLinks.length || !statusValue) {
+  if (!navLinks.length) {
     return;
   }
-
-  const labels = new Map([
-    ['hero', 'Hero'],
-    ['portfolio', 'Profile'],
-    ['workflow', 'Workflow'],
-    ['services', 'Services'],
-    ['ai-assistant', 'Assistant'],
-    ['contact', 'Contact']
-  ]);
 
   const sections = navLinks
     .map((link) => document.querySelector(link.getAttribute('href')))
@@ -131,8 +121,6 @@ function setupScrollSpy() {
       const isActive = link.getAttribute('href') === `#${activeId}`;
       link.classList.toggle('active', isActive);
     });
-
-    statusValue.textContent = labels.get(activeId) || 'Hero';
   };
 
   update();
@@ -318,7 +306,8 @@ function setupHorizontalScroll() {
       }
 
       const distance = Math.max(track.scrollWidth - sticky.clientWidth, 0);
-      shell.style.minHeight = `${window.innerHeight + distance + 120}px`;
+      const shellHeight = sticky.offsetHeight + distance + 32;
+      shell.style.minHeight = `${shellHeight}px`;
       instances.push({ shell, sticky, track, distance });
     });
 
@@ -335,8 +324,9 @@ function setupHorizontalScroll() {
       const shellTop = shell.offsetTop;
       const shellHeight = shell.offsetHeight;
       const stickyHeight = sticky.offsetHeight;
+      const scrollStart = shellTop + sticky.offsetTop - 96;
       const maxScrollable = Math.max(shellHeight - stickyHeight, 1);
-      const relativeScroll = Math.min(Math.max(window.scrollY - shellTop + 96, 0), maxScrollable);
+      const relativeScroll = Math.min(Math.max(window.scrollY - scrollStart, 0), maxScrollable);
       const progress = relativeScroll / maxScrollable;
       const translateX = distance * progress;
       track.style.transform = `translate3d(-${translateX}px, 0, 0)`;

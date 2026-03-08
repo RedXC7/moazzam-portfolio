@@ -168,7 +168,6 @@ h4,
 
 .eyebrow,
 .nav-links a,
-.nav-status,
 .metric-label,
 .floating-label,
 .marquee-content,
@@ -218,23 +217,6 @@ nav {
 .logo {
     font-size: 1.5rem;
     letter-spacing: 0.08em;
-}
-
-.nav-status {
-    display: grid;
-    gap: 0.05rem;
-    color: var(--muted);
-}
-
-.nav-status-label {
-    font-size: 0.66rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-}
-
-.nav-status-value {
-    color: var(--muted-strong);
-    font-size: 0.86rem;
 }
 
 .menu-toggle {
@@ -691,12 +673,12 @@ main {
 }
 
 .horizontal-section {
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
 }
 
 .horizontal-scroll-shell {
     position: relative;
-    min-height: 220vh;
+    min-height: auto;
 }
 
 .horizontal-sticky {
@@ -710,7 +692,7 @@ main {
     display: flex;
     gap: 1rem;
     width: max-content;
-    padding: 0.4rem 0 0.6rem;
+    padding: 0.4rem 0 0.15rem;
     will-change: transform;
 }
 
