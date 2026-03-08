@@ -232,7 +232,7 @@ function setupChat() {
     }
   });
 
-  addMessage('Hello. Ask about services, pricing, availability in Krachi, or project workflow.', 'assistant');
+  addMessage('Hello. Ask about services, pricing, Karachi availability, or project workflow.', 'assistant');
 }
 
 function setupVideoFallback() {
@@ -267,7 +267,7 @@ function setupTilt() {
   }
 
   tiltItems.forEach((item) => {
-    const intensity = Number(item.dataset.tiltIntensity || 4);
+    const intensity = Number(item.dataset.tiltIntensity || 2.4);
 
     item.addEventListener('mousemove', (event) => {
       const rect = item.getBoundingClientRect();
@@ -276,7 +276,7 @@ function setupTilt() {
       const rotateX = (0.5 - y) * intensity;
       const rotateY = (x - 0.5) * intensity;
       item.classList.add('is-touching');
-      item.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-2px)`;
+      item.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-1px)`;
     });
 
     item.addEventListener('mouseleave', () => {
