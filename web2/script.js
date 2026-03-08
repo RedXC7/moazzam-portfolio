@@ -1,319 +1,381 @@
-// ============================================
-// INITIALIZATION & LOGGING
-// ============================================
-console.log('Script loaded successfully');
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const supportsFinePointer = window.matchMedia('(pointer: fine)').matches;
 
-// ============================================
-// HERO IMAGE PARALLAX & FADE
-// ============================================
 const heroImage = document.querySelector('.hero-image');
-if (heroImage) {
-  window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    const height = window.innerHeight;
-    const opacity = Math.max(1 - scrolled / (height * 0.7), 0);
-    heroImage.style.opacity = opacity;
-    heroImage.style.transform = `translateY(${scrolled * 0.2}px) scale(${1 + scrolled * 0.0005})`;
-  });
-}
-
-// ============================================
-// MOBILE MENU TOGGLE
-// ============================================
 const menuToggle = document.querySelector('.menu-toggle');
 const navLinks = document.querySelector('.nav-links');
+const sections = document.querySelectorAll('.reveal-section');
+const chatMessages = document.getElementById('chat-messages');
+const chatInput = document.getElementById('chat-input');
+const sendButton = document.getElementById('send-button');
+const typingTitle = document.getElementById('typing-title');
 
-if (menuToggle && navLinks) {
+function setupMobileMenu() {
+  if (!menuToggle || !navLinks) return;
+
   menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
+    const isOpen = navLinks.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
   });
 
-  navLinks.addEventListener('click', (e) => {
-    if (e.target.tagName === 'A') {
+  navLinks.addEventListener('click', (event) => {
+    if (event.target.tagName === 'A') {
       navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
     }
   });
 }
 
-// ============================================
-// SECTION ANIMATIONS (INTERSECTION OBSERVER)
-// ============================================
-const sections = document.querySelectorAll('.section');
-if (sections.length > 0) {
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  };
+function setupSectionReveal() {
+  if (!sections.length) return;
 
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
       }
     });
-  }, observerOptions);
+  }, {
+    threshold: 0.18,
+    rootMargin: '0px 0px -8% 0px'
+  });
 
-  sections.forEach(section => {
-    observer.observe(section);
+  sections.forEach((section) => observer.observe(section));
+}
+
+function setupHeroParallax() {
+  if (!heroImage || prefersReducedMotion) return;
+
+  const updateParallax = () => {
+    const offset = Math.min(window.scrollY * 0.08, 36);
+    heroImage.style.transform = `translate3d(0, ${offset}px, 0) scale(1.03)`;
+  };
+
+  updateParallax();
+  window.addEventListener('scroll', updateParallax, { passive: true });
+}
+
+function setupTypingTitle() {
+  if (!typingTitle) return;
+
+  const titleText = 'Selected Work';
+  let index = 0;
+  let started = false;
+
+  const type = () => {
+    if (index < titleText.length) {
+      typingTitle.textContent += titleText.charAt(index);
+      index += 1;
+      window.setTimeout(type, 72);
+    }
+  };
+
+  const portfolioSection = document.getElementById('portfolio');
+  if (!portfolioSection) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && !started) {
+        started = true;
+        type();
+      }
+    });
+  }, { threshold: 0.35 });
+
+  observer.observe(portfolioSection);
+}
+
+function setupExpandablePanels() {
+  document.querySelectorAll('.expand-arrow').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const panelId = button.getAttribute('aria-controls');
+      const panel = panelId ? document.getElementById(panelId) : null;
+      if (!panel) return;
+
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+      button.setAttribute('aria-expanded', String(!isExpanded));
+      panel.classList.toggle('expanded', !isExpanded);
+    });
   });
 }
 
-// ============================================
-// AI ASSISTANT CHAT
-// ============================================
-const chatMessages = document.getElementById('chat-messages');
-const chatInput = document.getElementById('chat-input');
-const sendButton = document.getElementById('send-button');
+function initCarousel(carouselId) {
+  const carousel = document.getElementById(carouselId);
+  if (!carousel) return;
 
-if (chatMessages && chatInput && sendButton) {
-  function addMessage(content, type) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type}`;
-    messageDiv.textContent = content;
-    chatMessages.appendChild(messageDiv);
+  const images = Array.from(carousel.querySelectorAll('img'));
+  const prevButton = carousel.querySelector('.prev');
+  const nextButton = carousel.querySelector('.next');
+  if (!images.length) return;
+
+  let currentIndex = 0;
+
+  const showImage = (index) => {
+    images.forEach((image, imageIndex) => {
+      image.style.display = imageIndex === index ? 'block' : 'none';
+    });
+  };
+
+  showImage(currentIndex);
+
+  prevButton?.addEventListener('click', (event) => {
+    event.preventDefault();
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    showImage(currentIndex);
+  });
+
+  nextButton?.addEventListener('click', (event) => {
+    event.preventDefault();
+    currentIndex = (currentIndex + 1) % images.length;
+    showImage(currentIndex);
+  });
+}
+
+function setupCarousels() {
+  ['modelling-carousel', 'sports-carousel', 'automotive-carousel', 'others-carousel'].forEach(initCarousel);
+}
+
+function setupVideoAvailability() {
+  const video = document.getElementById('videography-video');
+  const placeholder = document.getElementById('video-placeholder');
+  const videoSource = video?.querySelector('source');
+  if (!video || !placeholder || !videoSource) return;
+
+  fetch(videoSource.src, { method: 'HEAD' })
+    .then((response) => {
+      const hasVideo = response.ok;
+      video.style.display = hasVideo ? 'block' : 'none';
+      placeholder.style.display = hasVideo ? 'none' : 'block';
+    })
+    .catch(() => {
+      video.style.display = 'none';
+      placeholder.style.display = 'block';
+    });
+}
+
+function setupCursor() {
+  if (!supportsFinePointer || prefersReducedMotion) return;
+
+  const cursor = document.createElement('div');
+  cursor.id = 'custom-cursor';
+  document.body.appendChild(cursor);
+  document.body.classList.add('cursor-active');
+
+  document.addEventListener('mousemove', (event) => {
+    cursor.style.left = `${event.clientX}px`;
+    cursor.style.top = `${event.clientY}px`;
+  });
+
+  document.addEventListener('mousedown', () => {
+    document.body.classList.add('cursor-pressed');
+  });
+
+  document.addEventListener('mouseup', () => {
+    document.body.classList.remove('cursor-pressed');
+  });
+}
+
+function setupTiltCards() {
+  if (!supportsFinePointer || prefersReducedMotion) return;
+
+  const cards = document.querySelectorAll('[data-tilt-card]');
+  cards.forEach((card) => {
+    card.addEventListener('mousemove', (event) => {
+      const rect = card.getBoundingClientRect();
+      const offsetX = (event.clientX - rect.left) / rect.width;
+      const offsetY = (event.clientY - rect.top) / rect.height;
+      const rotateY = (offsetX - 0.5) * 8;
+      const rotateX = (0.5 - offsetY) * 6;
+      card.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translate3d(0, -2px, 0)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+}
+
+function setupParticles() {
+  if (prefersReducedMotion) return;
+
+  const canvas = document.getElementById('particles-canvas');
+  if (!canvas) return;
+
+  const context = canvas.getContext('2d');
+  if (!context) return;
+
+  const pointer = {
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+    active: false
+  };
+
+  let particles = [];
+  let animationFrame = 0;
+
+  const resize = () => {
+    const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+    canvas.width = Math.floor(window.innerWidth * ratio);
+    canvas.height = Math.floor(window.innerHeight * ratio);
+    canvas.style.width = `${window.innerWidth}px`;
+    canvas.style.height = `${window.innerHeight}px`;
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    const particleCount = window.innerWidth < 700 ? 22 : 38;
+    particles = Array.from({ length: particleCount }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.22,
+      vy: (Math.random() - 0.5) * 0.22,
+      radius: Math.random() * 1.8 + 0.8
+    }));
+  };
+
+  const draw = () => {
+    context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    particles.forEach((particle, index) => {
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+
+      if (particle.x < -10) particle.x = window.innerWidth + 10;
+      if (particle.x > window.innerWidth + 10) particle.x = -10;
+      if (particle.y < -10) particle.y = window.innerHeight + 10;
+      if (particle.y > window.innerHeight + 10) particle.y = -10;
+
+      if (pointer.active) {
+        const dx = pointer.x - particle.x;
+        const dy = pointer.y - particle.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance < 160 && distance > 0) {
+          particle.x -= (dx / distance) * 0.25;
+          particle.y -= (dy / distance) * 0.25;
+        }
+      }
+
+      context.beginPath();
+      context.fillStyle = index % 3 === 0 ? 'rgba(255, 94, 58, 0.65)' : 'rgba(104, 215, 255, 0.55)';
+      context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+      context.fill();
+    });
+
+    animationFrame = window.requestAnimationFrame(draw);
+  };
+
+  resize();
+  draw();
+
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', (event) => {
+    pointer.x = event.clientX;
+    pointer.y = event.clientY;
+    pointer.active = true;
+  }, { passive: true });
+  window.addEventListener('mouseleave', () => {
+    pointer.active = false;
+  });
+
+  window.addEventListener('beforeunload', () => {
+    window.cancelAnimationFrame(animationFrame);
+  });
+}
+
+function setupLoader() {
+  const loader = document.createElement('div');
+  loader.id = 'loader';
+  loader.innerHTML = '<div class="loader-bg"></div><div class="loader-text">Loading...</div>';
+  document.body.appendChild(loader);
+
+  window.setTimeout(() => loader.classList.add('fade'), 900);
+  window.setTimeout(() => loader.remove(), 1450);
+}
+
+function setupChat() {
+  if (!chatMessages || !chatInput || !sendButton) return;
+
+  const addMessage = (content, type) => {
+    const message = document.createElement('div');
+    message.className = `message ${type}`;
+    message.textContent = content;
+    chatMessages.appendChild(message);
     chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
+  };
 
-  async function sendMessage() {
-    const message = chatInput.value.trim();
-    if (!message) return;
+  const getApiBase = () => {
+    const apiMeta = document.querySelector('meta[name="api-base-url"]');
+    const configuredApiBase = apiMeta ? apiMeta.content.trim() : '';
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'http://localhost:8003';
+    }
+    return configuredApiBase;
+  };
 
-    addMessage(message, 'user');
+  const sendMessage = async () => {
+    const query = chatInput.value.trim();
+    if (!query) return;
+
+    const apiBase = getApiBase();
+    addMessage(query, 'user');
     chatInput.value = '';
     sendButton.disabled = true;
     sendButton.textContent = 'Sending...';
 
     try {
-      // Use meta-configured backend URL in production, localhost in local dev.
-      const apiMeta = document.querySelector('meta[name="api-base-url"]');
-      const configuredApiBase = apiMeta ? apiMeta.content.trim() : '';
-      const API_BASE = window.location.hostname === 'localhost'
-        ? 'http://localhost:8003'
-        : configuredApiBase;
-
-      if (!API_BASE) {
-        throw new Error('Backend URL is missing. Set meta[name="api-base-url"] in index.html');
+      if (!apiBase) {
+        throw new Error('Missing backend URL');
       }
-      
-      const response = await fetch(`${API_BASE}/api/chat`, {
+
+      const response = await fetch(`${apiBase}/api/chat`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ query: message }),
+        body: JSON.stringify({ query })
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Chat request failed with status ${response.status}`);
       }
 
-      const data = await response.json();
-      addMessage(data.answer, 'assistant');
+      const payload = await response.json();
+      addMessage(payload.answer, 'assistant');
     } catch (error) {
-      console.error('Chat error:', error);
-      addMessage('Sorry, I encountered an error. Please try again later.', 'assistant');
+      console.error(error);
+      addMessage('Sorry, I hit an error while answering. Please try again in a moment.', 'assistant');
     } finally {
       sendButton.disabled = false;
       sendButton.textContent = 'Send';
     }
-  }
+  };
 
   sendButton.addEventListener('click', sendMessage);
-  chatInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
+  chatInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
       sendMessage();
     }
   });
 
-  addMessage("Hello! I'm Moazzam's AI assistant. Ask me anything about his services, portfolio, or feel free to chat!", 'assistant');
+  addMessage("Hello. I'm Moazzam's AI assistant. Ask about services, booking, photography, editing, or AI development.", 'assistant');
 }
 
-// ============================================
-// TYPING EFFECT FOR PORTFOLIO TITLE
-// ============================================
-const typingTitle = document.getElementById('typing-title');
-if (typingTitle) {
-  const text = 'Portfolio';
-  let index = 0;
-
-  function typeWriter() {
-    if (index < text.length) {
-      typingTitle.innerHTML += text.charAt(index);
-      index++;
-      setTimeout(typeWriter, 150);
-    }
-  }
-
-  const portfolioSection = document.getElementById('portfolio');
-  if (portfolioSection) {
-    const portfolioObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !typingTitle.innerHTML) {
-          typeWriter();
-        }
-      });
-    }, { threshold: 0.5 });
-    portfolioObserver.observe(portfolioSection);
-  }
-}
-
-// ============================================
-// EXPAND/COLLAPSE SERVICE PANELS
-// ============================================
-function setupExpandablePanels() {
-  document.querySelectorAll('.expand-arrow').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      const panelId = this.getAttribute('aria-controls');
-      const panel = document.getElementById(panelId);
-      
-      if (!panel) {
-        console.error('Panel not found:', panelId);
-        return;
-      }
-      
-      const expanded = this.getAttribute('aria-expanded') === 'true';
-      this.setAttribute('aria-expanded', !expanded);
-      panel.classList.toggle('expanded');
-      
-      console.log('Panel toggled:', panelId, 'Now expanded:', !expanded);
-    });
-  });
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', setupExpandablePanels);
-} else {
+function init() {
+  setupLoader();
+  setupMobileMenu();
+  setupSectionReveal();
+  setupHeroParallax();
+  setupTypingTitle();
   setupExpandablePanels();
-}
-
-// ============================================
-// PHOTO CAROUSELS - SIMPLE IMAGE DISPLAY
-// ============================================
-function initCarousel(carouselId) {
-  const carousel = document.getElementById(carouselId);
-  if (!carousel) return;
-
-  const images = carousel.querySelectorAll('img');
-  if (images.length === 0) return;
-
-  let currentIndex = 0;
-  const prevBtn = carousel.querySelector('.prev');
-  const nextBtn = carousel.querySelector('.next');
-
-  function showImage(index) {
-    images.forEach((img, i) => {
-      img.style.display = i === index ? 'block' : 'none';
-    });
-  }
-
-  showImage(currentIndex);
-
-  if (prevBtn) {
-    prevBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      showImage(currentIndex);
-    });
-  }
-
-  if (nextBtn) {
-    nextBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      currentIndex = (currentIndex + 1) % images.length;
-      showImage(currentIndex);
-    });
-  }
+  setupCarousels();
+  setupVideoAvailability();
+  setupCursor();
+  setupTiltCards();
+  setupParticles();
+  setupChat();
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    initCarousel('modelling-carousel');
-    initCarousel('sports-carousel');
-    initCarousel('automotive-carousel');
-    initCarousel('others-carousel');
-  });
+  document.addEventListener('DOMContentLoaded', init);
 } else {
-  initCarousel('modelling-carousel');
-  initCarousel('sports-carousel');
-  initCarousel('automotive-carousel');
-  initCarousel('others-carousel');
+  init();
 }
-
-// ============================================
-// LOADING SCREEN
-// ============================================
-window.addEventListener('DOMContentLoaded', () => {
-  const loader = document.createElement('div');
-  loader.id = 'loader';
-  loader.innerHTML = '<div class="loader-bg"></div><div class="loader-text">Loading...</div>';
-  document.body.appendChild(loader);
-  
-  setTimeout(() => loader.classList.add('fade'), 1200);
-  setTimeout(() => {
-    if (loader.parentNode) {
-      loader.parentNode.removeChild(loader);
-    }
-  }, 1800);
-});
-
-// ============================================
-// CUSTOM CURSOR
-// ============================================
-const cursor = document.createElement('div');
-cursor.id = 'custom-cursor';
-document.body.appendChild(cursor);
-
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-});
-
-// ============================================
-// HOVER EFFECTS ON SERVICE CARDS
-// ============================================
-document.querySelectorAll('.service-card').forEach(card => {
-  card.addEventListener('mousemove', function(e) {
-    const rect = this.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = (y - centerY) / 15;
-    const rotateY = (centerX - x) / 15;
-    this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
-  });
-
-  card.addEventListener('mouseleave', function() {
-    this.style.transform = '';
-  });
-});
-
-  // Auto-detect if video file exists
-  const video = document.getElementById('videography-video');
-  const videoContainer = document.getElementById('video-container');
-  const videoPlaceholder = document.getElementById('video-placeholder');
-  
-  if (video && videoContainer && videoPlaceholder) {
-    const videoSource = video.querySelector('source');
-    if (videoSource) {
-      const videoPath = videoSource.src;
-      fetch(videoPath, { method: 'HEAD' })
-        .then(response => {
-          if (response.ok) {
-            video.style.display = 'block';
-            videoPlaceholder.style.display = 'none';
-          }
-        })
-        .catch(() => {
-          video.style.display = 'none';
-          videoPlaceholder.style.display = 'block';
-        });
-    }
-  }
-
-console.log('All scripts initialized successfully');
