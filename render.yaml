@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: moazzam-portfolio
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn my_agent.api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GOOGLE_API_KEY
+        scope: build,runtime
