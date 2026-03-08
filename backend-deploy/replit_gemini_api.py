@@ -10,6 +10,8 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     raise RuntimeError("GOOGLE_API_KEY is not set")
 
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
+
 configure(api_key=GOOGLE_API_KEY)
 
 SYSTEM_PROMPT = """
@@ -37,7 +39,7 @@ Important rules:
 """.strip()
 
 model = GenerativeModel(
-    model_name="gemini-1.5-flash",
+    model_name=GEMINI_MODEL,
     system_instruction=SYSTEM_PROMPT,
 )
 
