@@ -145,6 +145,18 @@ nav {
     box-shadow: var(--shadow);
 }
 
+.panel-section::after {
+    content: '';
+    display: block;
+    height: 1px;
+    margin-top: 1.2rem;
+    background: linear-gradient(90deg, rgba(255, 123, 84, 0.22), rgba(255, 255, 255, 0));
+}
+
+#contact.panel-section::after {
+    display: none;
+}
+
 .logo,
 h1,
 h2,
@@ -394,6 +406,8 @@ main {
 }
 
 .panel-section {
+    position: relative;
+    overflow: hidden;
     margin-top: 1.4rem;
     padding: clamp(1.5rem, 4vw, 2.5rem);
     border: 1px solid var(--border);
@@ -403,7 +417,18 @@ main {
     box-shadow: var(--shadow);
 }
 
+.panel-section::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 7rem;
+    background: radial-gradient(circle at top, rgba(255, 123, 84, 0.1), transparent 70%);
+    pointer-events: none;
+}
+
 .section-heading {
+    position: relative;
+    z-index: 1;
     margin-bottom: 1.6rem;
 }
 
@@ -478,6 +503,7 @@ main {
 }
 
 .service-card {
+    position: relative;
     grid-column: span 6;
     padding: 1.4rem;
     border-radius: 24px;
@@ -487,6 +513,10 @@ main {
 
 .service-card-feature {
     grid-column: 1 / -1;
+}
+
+.service-card-static {
+    min-height: 100%;
 }
 
 .service-card:hover,
@@ -560,6 +590,11 @@ main {
 
 .service-panel > * {
     overflow: hidden;
+}
+
+.service-panel-content {
+    display: grid;
+    gap: 1rem;
 }
 
 .service-panel.expanded {
@@ -646,6 +681,14 @@ main {
     margin-bottom: 0.75rem;
 }
 
+.photo-category {
+    position: relative;
+    padding: 1rem;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.025);
+}
+
 .photo-carousel {
     position: relative;
     min-height: 13.5rem;
@@ -654,13 +697,31 @@ main {
     justify-content: center;
     width: min(100%, 760px);
     margin: 0 auto;
-    padding: 0.75rem 3rem;
+    padding: 0;
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.03);
+    overflow: hidden;
 }
 
-.photo-carousel img {
+.photo-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.38s ease;
+}
+
+.photo-slide {
+    flex: 0 0 100%;
+    min-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 3.6rem;
+}
+
+.photo-slide img,
+.photo-carousel > img {
     width: 100%;
     height: clamp(12rem, 30vw, 18rem);
     border-radius: 16px;
@@ -680,6 +741,7 @@ main {
     color: var(--text);
     cursor: pointer;
     transition: transform 0.24s ease, background 0.24s ease;
+    z-index: 2;
 }
 
 .photo-carousel button:hover,
@@ -693,6 +755,18 @@ main {
 
 .photo-carousel .next {
     right: 0.8rem;
+}
+
+.photo-category::after {
+    content: '';
+    display: block;
+    margin-top: 0.9rem;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 123, 84, 0.18), rgba(255, 255, 255, 0));
+}
+
+.photo-category:last-child::after {
+    display: none;
 }
 
 .chat-shell {
@@ -783,6 +857,7 @@ main {
 
 #contact {
     margin-bottom: 0;
+    padding-bottom: clamp(1.25rem, 3vw, 1.8rem);
 }
 
 .contact-item {
@@ -876,6 +951,10 @@ main {
         min-height: 24rem;
     }
 
+    .service-card {
+        grid-column: 1 / -1;
+    }
+
     .contact-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -923,10 +1002,19 @@ main {
 
     .panel-section {
         border-radius: 26px;
+        padding: 1.2rem;
     }
 
     .hero-frame {
         padding-top: 1.5rem;
+    }
+
+    .service-card {
+        padding: 1.15rem;
+    }
+
+    .photo-category {
+        padding: 0.85rem;
     }
 }
 
@@ -960,11 +1048,29 @@ main {
     }
 
     .photo-carousel {
-        padding-inline: 2.6rem;
+        width: 100%;
     }
 
-    .photo-carousel img {
+    .photo-slide {
+        padding-inline: 2.9rem;
+    }
+
+    .photo-slide img,
+    .photo-carousel > img {
         height: 11rem;
+    }
+
+    .photo-carousel button {
+        width: 2.2rem;
+        height: 2.2rem;
+    }
+
+    .photo-carousel .prev {
+        left: 0.5rem;
+    }
+
+    .photo-carousel .next {
+        right: 0.5rem;
     }
 }
 

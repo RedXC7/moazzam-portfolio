@@ -127,6 +127,10 @@ function initCarousel(carouselId) {
     return;
   }
 
+  if (carousel.querySelector('.photo-track')) {
+    return;
+  }
+
   const images = Array.from(carousel.querySelectorAll('img'));
   const prev = carousel.querySelector('.prev');
   const next = carousel.querySelector('.next');
@@ -134,11 +138,26 @@ function initCarousel(carouselId) {
     return;
   }
 
+  const track = document.createElement('div');
+  track.className = 'photo-track';
+
+  images.forEach((image, imageIndex) => {
+    const slide = document.createElement('div');
+    slide.className = 'photo-slide';
+    slide.setAttribute('aria-hidden', imageIndex === 0 ? 'false' : 'true');
+    slide.appendChild(image);
+    track.appendChild(slide);
+  });
+
+  carousel.insertBefore(track, prev);
+
   let index = 0;
+  let touchStartX = 0;
 
   const render = () => {
-    images.forEach((image, imageIndex) => {
-      image.hidden = imageIndex !== index;
+    track.style.transform = `translateX(-${index * 100}%)`;
+    Array.from(track.children).forEach((slide, slideIndex) => {
+      slide.setAttribute('aria-hidden', slideIndex === index ? 'false' : 'true');
     });
   };
 
@@ -155,6 +174,24 @@ function initCarousel(carouselId) {
     index = (index + 1) % images.length;
     render();
   });
+
+  track.addEventListener('touchstart', (event) => {
+    touchStartX = event.touches[0]?.clientX ?? 0;
+  }, { passive: true });
+
+  track.addEventListener('touchend', (event) => {
+    const touchEndX = event.changedTouches[0]?.clientX ?? touchStartX;
+    const deltaX = touchEndX - touchStartX;
+
+    if (Math.abs(deltaX) < 40) {
+      return;
+    }
+
+    index = deltaX > 0
+      ? (index - 1 + images.length) % images.length
+      : (index + 1) % images.length;
+    render();
+  }, { passive: true });
 
   render();
 }
@@ -232,7 +269,7 @@ function setupChat() {
     }
   });
 
-  addMessage('Hello. Ask about services, pricing, Karachi availability, or project workflow.', 'assistant');
+  addMessage('Hello. Ask about services, pricing, Karachi availability, or the project workflow.', 'assistant');
 }
 
 function setupVideoFallback() {
