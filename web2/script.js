@@ -287,55 +287,15 @@ function setupHorizontalScroll() {
     return;
   }
 
-  const instances = [];
+  shells.forEach((shell) => {
+    const track = shell.querySelector('.horizontal-track');
+    if (!track) {
+      return;
+    }
 
-  const measure = () => {
-    instances.length = 0;
-
-    shells.forEach((shell) => {
-      const sticky = shell.querySelector('.horizontal-sticky');
-      const track = shell.querySelector('.horizontal-track');
-      if (!sticky || !track) {
-        return;
-      }
-
-      if (window.innerWidth <= 920 || prefersReducedMotion) {
-        shell.style.minHeight = 'auto';
-        track.style.transform = 'translate3d(0, 0, 0)';
-        return;
-      }
-
-      const distance = Math.max(track.scrollWidth - sticky.clientWidth, 0);
-      const shellHeight = sticky.offsetHeight + distance + 32;
-      shell.style.minHeight = `${shellHeight}px`;
-      instances.push({ shell, sticky, track, distance });
-    });
-
-    update();
-  };
-
-  const update = () => {
-    instances.forEach(({ shell, sticky, track, distance }) => {
-      if (distance <= 0) {
-        track.style.transform = 'translate3d(0, 0, 0)';
-        return;
-      }
-
-      const shellTop = shell.offsetTop;
-      const shellHeight = shell.offsetHeight;
-      const stickyHeight = sticky.offsetHeight;
-      const scrollStart = shellTop + sticky.offsetTop - 96;
-      const maxScrollable = Math.max(shellHeight - stickyHeight, 1);
-      const relativeScroll = Math.min(Math.max(window.scrollY - scrollStart, 0), maxScrollable);
-      const progress = relativeScroll / maxScrollable;
-      const translateX = distance * progress;
-      track.style.transform = `translate3d(-${translateX}px, 0, 0)`;
-    });
-  };
-
-  measure();
-  window.addEventListener('resize', measure);
-  window.addEventListener('scroll', update, { passive: true });
+    shell.style.minHeight = 'auto';
+    track.style.transform = 'translate3d(0, 0, 0)';
+  });
 }
 
 function setupChat() {

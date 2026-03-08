@@ -682,22 +682,21 @@ main {
 }
 
 .horizontal-sticky {
-    position: sticky;
-    top: 6.1rem;
-    overflow: hidden;
+    position: static;
+    overflow: visible;
     border-radius: 28px;
 }
 
 .horizontal-track {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1rem;
-    width: max-content;
+    width: 100%;
     padding: 0.4rem 0 0.15rem;
-    will-change: transform;
 }
 
 .rail-card {
-    width: min(24rem, 72vw);
+    width: 100%;
     min-height: 25rem;
     padding: 1.4rem;
 }
@@ -1256,6 +1255,10 @@ main {
     .contact-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .horizontal-track {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 920px) {
@@ -1276,20 +1279,8 @@ main {
         left: 1rem;
     }
 
-    .horizontal-scroll-shell {
-        min-height: auto;
-    }
-
-    .horizontal-sticky {
-        position: static;
-        overflow: visible;
-    }
-
     .horizontal-track {
-        width: 100%;
-        display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        transform: none !important;
     }
 
     .rail-card {
