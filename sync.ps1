@@ -19,6 +19,14 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 
 Set-Location $repoPath
 
+$trackedPaths = @(
+  '.gitignore',
+  'README.md',
+  'sync.ps1',
+  'web2',
+  'backend-deploy'
+)
+
 if (-not (Test-Path '.git')) {
   & $gitCmd init
   & $gitCmd branch -M main
@@ -34,7 +42,7 @@ if (-not $hasOrigin) {
   }
 }
 
-& $gitCmd add -A
+& $gitCmd add --all -- $trackedPaths
 $status = & $gitCmd status --porcelain
 if (-not $status) {
   Write-Output 'No changes to commit.'
@@ -44,9 +52,13 @@ if (-not $status) {
 & $gitCmd commit -m $Message
 
 # If repo already has commits on GitHub, try to rebase before push.
-& $gitCmd fetch origin main 2>$null
-if ($LASTEXITCODE -eq 0) {
-  & $gitCmd pull --rebase origin main
+try {
+  & $gitCmd fetch origin main 2>$null
+  if ($LASTEXITCODE -eq 0) {
+    & $gitCmd pull --rebase origin main
+  }
+} catch {
+  Write-Output 'Skipping remote rebase check for this sync.'
 }
 
 & $gitCmd push -u origin main

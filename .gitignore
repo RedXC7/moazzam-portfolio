@@ -20,8 +20,15 @@ node_modules/
 .next/
 
 # Package files (keep only source)
+my_agent/
 my_agent/packages/
 my_agent/__pycache__/
+
+# Local-only project folders/files that are not part of the portfolio repo
+web/
+.env.example
+render.yaml
+requirements.txt
 
 # Large media files (upload separately to Render)
 *.mp4
