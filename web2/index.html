@@ -6,12 +6,14 @@
     <title>Muhammad Moazzam Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Expletus+Sans:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Expletus+Sans:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <meta name="api-base-url" content="https://fc9c77e1-8772-4f78-bcbe-0a9c7b51f913-00-um5ke8vial1g.sisko.replit.dev:8000">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="bg-gradient" aria-hidden="true"></div>
+    <div class="grid-layer" aria-hidden="true"></div>
+    <div class="cursor-spotlight" aria-hidden="true"></div>
     <canvas id="particle-canvas" aria-hidden="true"></canvas>
     <div class="wave-layer" aria-hidden="true"></div>
     <div class="orb orb-left" aria-hidden="true"></div>
@@ -19,12 +21,19 @@
 
     <header id="hero">
         <nav>
-            <div class="logo">Moazzam</div>
+            <div class="logo-wrap">
+                <div class="logo">Moazzam</div>
+                <div class="nav-status">
+                    <span class="nav-status-label">Viewing</span>
+                    <span class="nav-status-value">Hero</span>
+                </div>
+            </div>
             <button class="menu-toggle" type="button" aria-label="Toggle navigation">☰</button>
             <ul class="nav-links">
-                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#portfolio">Profile</a></li>
+                <li><a href="#workflow">Workflow</a></li>
                 <li><a href="#services">Services</a></li>
-                <li><a href="#ai-assistant">AI Assistant</a></li>
+                <li><a href="#ai-assistant">Assistant</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -32,45 +41,90 @@
         <div class="hero-frame">
             <div class="hero-copy">
                 <p class="eyebrow">Visual Storytelling + Agentic AI</p>
-                <h1>Creative work shaped with precision, motion, and modern systems.</h1>
-                <p class="hero-text">I blend photography, filmmaking, editing, digital marketing, and custom AI workflows into a compact portfolio designed for strong presentation and smooth interaction.</p>
+                <h1 data-split-text>Creative work shaped with precision, motion, and modern systems.</h1>
+                <p class="hero-text">I blend photography, filmmaking, editing, digital marketing, and custom AI workflows into a portfolio that moves with more rhythm, stronger visual hierarchy, and a sharper browsing experience.</p>
                 <div class="hero-actions">
-                    <a href="#services" class="button button-primary">Explore Services</a>
-                    <a href="#ai-assistant" class="button button-secondary">Ask the Assistant</a>
+                    <a href="#workflow" class="button button-primary">Enter the Flow</a>
+                    <a href="#services" class="button button-secondary">View Services</a>
                 </div>
                 <div class="hero-metrics">
-                    <div class="metric-card">
+                    <div class="metric-card" data-hover-glow>
                         <span class="metric-value">5</span>
                         <span class="metric-label">Creative disciplines</span>
                     </div>
-                    <div class="metric-card">
+                    <div class="metric-card" data-hover-glow>
                         <span class="metric-value">Karachi</span>
                         <span class="metric-label">Physical service base</span>
                     </div>
-                    <div class="metric-card">
+                    <div class="metric-card" data-hover-glow>
                         <span class="metric-value">AI</span>
                         <span class="metric-label">Workflow-ready support</span>
                     </div>
                 </div>
             </div>
-            <div class="hero-visual tilt-shell" data-tilt-intensity="2.6">
+
+            <div class="hero-visual tilt-shell" data-tilt-intensity="2.2">
                 <div class="hero-image-panel">
                     <img src="profile.jpg" alt="Muhammad Moazzam portrait">
                 </div>
                 <div class="floating-badge badge-top">Film + Photo + Systems</div>
+                <div class="hero-floating-card card-left" data-hover-glow>
+                    <span class="floating-label">Direction</span>
+                    <strong>Editorial visuals with deliberate motion and cleaner digital systems.</strong>
+                </div>
+                <div class="hero-floating-card card-right" data-hover-glow>
+                    <span class="floating-label">Focus</span>
+                    <strong>Photography, film, post, marketing, and agentic AI.</strong>
+                </div>
             </div>
         </div>
     </header>
 
+    <section class="marquee-band" aria-label="Capabilities and focus areas">
+        <div class="marquee-row marquee-row-forward">
+            <div class="marquee-content">
+                <span>PHOTOGRAPHY</span>
+                <span>VIDEOGRAPHY</span>
+                <span>POST-PRODUCTION</span>
+                <span>DIGITAL MARKETING</span>
+                <span>AGENTIC AI</span>
+                <span>VISUAL SYSTEMS</span>
+                <span>PHOTOGRAPHY</span>
+                <span>VIDEOGRAPHY</span>
+                <span>POST-PRODUCTION</span>
+                <span>DIGITAL MARKETING</span>
+                <span>AGENTIC AI</span>
+                <span>VISUAL SYSTEMS</span>
+            </div>
+        </div>
+        <div class="marquee-row marquee-row-reverse">
+            <div class="marquee-content">
+                <span>MODERN PORTFOLIOS</span>
+                <span>MOTION TYPOGRAPHY</span>
+                <span>BRAND VISUALS</span>
+                <span>ON-SITE IN KARACHI</span>
+                <span>REMOTE COLLABORATION</span>
+                <span>CREATIVE PRECISION</span>
+                <span>MODERN PORTFOLIOS</span>
+                <span>MOTION TYPOGRAPHY</span>
+                <span>BRAND VISUALS</span>
+                <span>ON-SITE IN KARACHI</span>
+                <span>REMOTE COLLABORATION</span>
+                <span>CREATIVE PRECISION</span>
+            </div>
+        </div>
+    </section>
+
     <main>
         <section id="portfolio" class="section panel-section reveal-section">
             <div class="section-heading">
-                <p class="eyebrow">Portfolio</p>
-                <h2 id="typing-title"></h2>
+                <p class="eyebrow">Profile</p>
+                <h2 id="typing-title" data-split-text>Portfolio</h2>
+                <p class="section-intro">A young creative with a technical mindset, building visual work and digital systems with the same focus on structure, atmosphere, and control.</p>
             </div>
 
             <div class="portfolio-layout">
-                <div class="profile-image-box tilt-shell" data-tilt-intensity="2.2">
+                <div class="profile-image-box tilt-shell" data-tilt-intensity="1.8">
                     <img src="profile.jpg" alt="Muhammad Moazzam">
                 </div>
 
@@ -79,15 +133,15 @@
                     <p>Beyond the sciences, I have hands-on experience in the film industry, cybersecurity, and agentic AI development. I work where visuals, systems, and creative experimentation meet, always looking for sharper ways to build and present ideas.</p>
 
                     <div class="detail-grid">
-                        <div class="detail-card">
+                        <div class="detail-card" data-hover-glow>
                             <span class="detail-label">Name</span>
                             <span class="detail-value">Muhammad Moazzam</span>
                         </div>
-                        <div class="detail-card">
+                        <div class="detail-card" data-hover-glow>
                             <span class="detail-label">Email</span>
                             <a class="detail-value" href="mailto:muhammad.moazzam635@gmail.com">muhammad.moazzam635@gmail.com</a>
                         </div>
-                        <div class="detail-card detail-card-wide">
+                        <div class="detail-card detail-card-wide" data-hover-glow>
                             <span class="detail-label">Specialties</span>
                             <span class="detail-value">Videography, filmmaking, photography, post-production, digital marketing, and agentic AI development.</span>
                         </div>
@@ -96,15 +150,73 @@
             </div>
         </section>
 
+        <section id="workflow" class="section panel-section reveal-section horizontal-section">
+            <div class="section-heading">
+                <p class="eyebrow">Flow</p>
+                <h2 data-split-text>How the work moves.</h2>
+                <p class="section-intro">This section changes the browsing pace on purpose. Scroll vertically and the rail moves sideways, echoing the more cinematic navigation rhythm of the reference site while staying usable on mobile.</p>
+            </div>
+
+            <div class="horizontal-scroll-shell" data-horizontal-scroll>
+                <div class="horizontal-sticky">
+                    <div class="horizontal-track">
+                        <article class="rail-card" data-hover-glow>
+                            <span class="rail-index">01</span>
+                            <h3>Brief and Direction</h3>
+                            <p>Project goals, visual intent, audience, and delivery format are aligned first so the work has a clear lane before production starts.</p>
+                            <ul class="rail-list">
+                                <li>Scope definition</li>
+                                <li>Visual references</li>
+                                <li>Execution planning</li>
+                            </ul>
+                        </article>
+
+                        <article class="rail-card rail-card-accent" data-hover-glow>
+                            <span class="rail-index">02</span>
+                            <h3>Capture and Build</h3>
+                            <p>Photography, filming, and on-set decisions focus on framing, motion, clarity, and material that holds up in post-production.</p>
+                            <ul class="rail-list">
+                                <li>Portrait and editorial coverage</li>
+                                <li>Sports and automotive capture</li>
+                                <li>On-site Karachi availability</li>
+                            </ul>
+                        </article>
+
+                        <article class="rail-card" data-hover-glow>
+                            <span class="rail-index">03</span>
+                            <h3>Edit and Refine</h3>
+                            <p>Cuts, pacing, color, and image polish are shaped with restraint so the final output feels intentional instead of overloaded.</p>
+                            <ul class="rail-list">
+                                <li>Color refinement</li>
+                                <li>Clean visual pacing</li>
+                                <li>Output-specific optimization</li>
+                            </ul>
+                        </article>
+
+                        <article class="rail-card" data-hover-glow>
+                            <span class="rail-index">04</span>
+                            <h3>Deploy and Extend</h3>
+                            <p>Content can be paired with digital marketing support or simple AI-assisted workflows when the project needs more than visuals alone.</p>
+                            <ul class="rail-list">
+                                <li>Remote support</li>
+                                <li>Creative systems thinking</li>
+                                <li>AI-ready workflow planning</li>
+                            </ul>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="services" class="section panel-section reveal-section">
             <div class="section-heading">
                 <p class="eyebrow">Services</p>
-                <h2>Services Provided</h2>
+                <h2 data-split-text>Services Provided</h2>
                 <p class="section-intro">Paid creative and technical services tailored for brands, individuals, and projects that need strong visuals with efficient execution.</p>
             </div>
 
             <div class="services-grid">
-                <article class="service-card service-card-feature tilt-shell" id="videography-card" data-tilt-intensity="1.8">
+                <article class="service-card service-card-feature tilt-shell" id="videography-card" data-tilt-intensity="1.4" data-hover-glow>
                     <div class="service-header">
                         <div>
                             <span class="service-kicker">Motion</span>
@@ -136,7 +248,7 @@
                     </div>
                 </article>
 
-                <article class="service-card service-card-feature tilt-shell" id="photography-card" data-tilt-intensity="1.8">
+                <article class="service-card service-card-feature tilt-shell" id="photography-card" data-tilt-intensity="1.4" data-hover-glow>
                     <div class="service-header">
                         <div>
                             <span class="service-kicker">Still</span>
@@ -147,7 +259,7 @@
                     <p class="service-summary">Portraits, sports, automotive, and editorial visuals framed for clarity, atmosphere, and identity.</p>
                     <div class="service-panel" id="photography-panel">
                         <div class="service-panel-content">
-                            <p class="panel-copy">A curated selection of DSLR photography across modelling, sports, automotive, and other visual studies.</p>
+                            <p class="panel-copy">Each image now keeps its own proportion inside the slider, so portrait, square, and wide shots no longer fight against one fixed crop.</p>
 
                             <div class="service-note-stack service-note-stack-tight">
                                 <div class="service-note">
@@ -156,8 +268,11 @@
                                 </div>
                             </div>
 
-                            <div class="photo-category">
-                                <h4>Modelling Photography</h4>
+                            <div class="photo-category" data-hover-glow>
+                                <div class="photo-category-head">
+                                    <h4>Modelling Photography</h4>
+                                    <span class="photo-category-note">Portrait-led editorial frames</span>
+                                </div>
                                 <div class="photo-carousel" id="modelling-carousel">
                                     <img src="IMG_20240312_231345_449.jpg" alt="Modelling Photo 1" loading="lazy">
                                     <img src="IMG_20240312_231345_529.jpg" alt="Modelling Photo 2" loading="lazy">
@@ -168,8 +283,11 @@
                                 </div>
                             </div>
 
-                            <div class="photo-category">
-                                <h4>Sports Photography</h4>
+                            <div class="photo-category" data-hover-glow>
+                                <div class="photo-category-head">
+                                    <h4>Sports Photography</h4>
+                                    <span class="photo-category-note">Sharper pace and movement</span>
+                                </div>
                                 <div class="photo-carousel" id="sports-carousel">
                                     <img src="IMG_20240127_220705_021.jpg" alt="Sports Photo 1" loading="lazy">
                                     <img src="IMG_20240127_220705_130.jpg" alt="Sports Photo 2" loading="lazy">
@@ -178,8 +296,11 @@
                                 </div>
                             </div>
 
-                            <div class="photo-category">
-                                <h4>Automotive Photography</h4>
+                            <div class="photo-category" data-hover-glow>
+                                <div class="photo-category-head">
+                                    <h4>Automotive Photography</h4>
+                                    <span class="photo-category-note">Wider compositions and machine detail</span>
+                                </div>
                                 <div class="photo-carousel" id="automotive-carousel">
                                     <img src="IMG_20240414_153317_776.jpg" alt="Automotive Photo 1" loading="lazy">
                                     <img src="IMG_20240523_140515_609.jpg" alt="Automotive Photo 2" loading="lazy">
@@ -188,8 +309,11 @@
                                 </div>
                             </div>
 
-                            <div class="photo-category">
-                                <h4>Others</h4>
+                            <div class="photo-category" data-hover-glow>
+                                <div class="photo-category-head">
+                                    <h4>Other Studies</h4>
+                                    <span class="photo-category-note">Experiments, texture, and scene work</span>
+                                </div>
                                 <div class="photo-carousel" id="others-carousel">
                                     <img src="20260301_163351.jpg" alt="Other Photo 1" loading="lazy">
                                     <img src="IMG_3364.jpg" alt="Other Photo 2" loading="lazy">
@@ -201,7 +325,7 @@
                     </div>
                 </article>
 
-                <article class="service-card tilt-shell service-card-static" data-tilt-intensity="1.6">
+                <article class="service-card tilt-shell service-card-static" data-tilt-intensity="1.2" data-hover-glow>
                     <div class="service-header service-header-static">
                         <div>
                             <span class="service-kicker">Post</span>
@@ -211,7 +335,7 @@
                     <p class="service-summary">Clean cuts, color refinement, pacing, and visual polishing for footage or imagery you already have.</p>
                 </article>
 
-                <article class="service-card tilt-shell service-card-static" data-tilt-intensity="1.6">
+                <article class="service-card tilt-shell service-card-static" data-tilt-intensity="1.2" data-hover-glow>
                     <div class="service-header service-header-static">
                         <div>
                             <span class="service-kicker">Growth</span>
@@ -226,11 +350,11 @@
         <section id="ai-assistant" class="section panel-section reveal-section">
             <div class="section-heading">
                 <p class="eyebrow">Assistant</p>
-                <h2>AI Assistant</h2>
+                <h2 data-split-text>AI Assistant</h2>
                 <p class="section-intro">Ask about services, pricing flow, style, location availability, or how the workflow is structured.</p>
             </div>
 
-            <div class="chat-shell tilt-shell" data-tilt-intensity="1.5">
+            <div class="chat-shell tilt-shell" data-tilt-intensity="1.2" data-hover-glow>
                 <div class="chat-container">
                     <div id="chat-messages" class="chat-messages"></div>
                     <div class="chat-input-container">
@@ -241,27 +365,31 @@
             </div>
         </section>
 
-        <section id="contact" class="section panel-section reveal-section">
+        <section id="contact" class="section panel-section reveal-section contact-section">
             <div class="section-heading">
                 <p class="eyebrow">Contact</p>
-                <h2>Contact &amp; Socials</h2>
+                <h2 data-split-text>Contact &amp; Socials</h2>
                 <p class="section-intro">Reach out directly for quotations, collaborations, or project planning.</p>
             </div>
 
+            <div class="contact-hero">
+                <p class="contact-super">Let’s build work that feels considered, current, and visually exact.</p>
+            </div>
+
             <div class="contact-grid">
-                <a href="mailto:muhammad.moazzam635@gmail.com" class="contact-item tilt-shell" target="_blank" rel="noreferrer">
+                <a href="mailto:muhammad.moazzam635@gmail.com" class="contact-item tilt-shell" target="_blank" rel="noreferrer" data-hover-glow>
                     <span class="icon">📧</span>
                     <span>Email</span>
                 </a>
-                <a href="https://www.instagram.com/mox.shots/" class="contact-item tilt-shell" target="_blank" rel="noreferrer">
+                <a href="https://www.instagram.com/mox.shots/" class="contact-item tilt-shell" target="_blank" rel="noreferrer" data-hover-glow>
                     <span class="icon">📷</span>
                     <span>Instagram</span>
                 </a>
-                <a href="https://www.facebook.com/profile.php?id=61560097457858" class="contact-item tilt-shell" target="_blank" rel="noreferrer">
+                <a href="https://www.facebook.com/profile.php?id=61560097457858" class="contact-item tilt-shell" target="_blank" rel="noreferrer" data-hover-glow>
                     <span class="icon">📘</span>
                     <span>Facebook</span>
                 </a>
-                <a href="https://www.linkedin.com/in/muhammad-moazzam-230143372/" class="contact-item tilt-shell" target="_blank" rel="noreferrer">
+                <a href="https://www.linkedin.com/in/muhammad-moazzam-230143372/" class="contact-item tilt-shell" target="_blank" rel="noreferrer" data-hover-glow>
                     <span class="icon">💼</span>
                     <span>LinkedIn</span>
                 </a>
