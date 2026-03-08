@@ -1,33 +1,31 @@
+console.log('Portfolio script loaded');
+
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const supportsFinePointer = window.matchMedia('(pointer: fine)').matches;
 
-const heroImage = document.querySelector('.hero-image');
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('.nav-links');
-const sections = document.querySelectorAll('.reveal-section');
-const chatMessages = document.getElementById('chat-messages');
-const chatInput = document.getElementById('chat-input');
-const sendButton = document.getElementById('send-button');
-const typingTitle = document.getElementById('typing-title');
+function setupNavigation() {
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navLinks = document.querySelector('.nav-links');
 
-function setupMobileMenu() {
-  if (!menuToggle || !navLinks) return;
+  if (!menuToggle || !navLinks) {
+    return;
+  }
 
   menuToggle.addEventListener('click', () => {
-    const isOpen = navLinks.classList.toggle('open');
-    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    navLinks.classList.toggle('open');
   });
 
   navLinks.addEventListener('click', (event) => {
     if (event.target.tagName === 'A') {
       navLinks.classList.remove('open');
-      menuToggle.setAttribute('aria-expanded', 'false');
     }
   });
 }
 
-function setupSectionReveal() {
-  if (!sections.length) return;
+function setupRevealSections() {
+  const sections = document.querySelectorAll('.reveal-section');
+  if (!sections.length) {
+    return;
+  }
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -36,62 +34,85 @@ function setupSectionReveal() {
       }
     });
   }, {
-    threshold: 0.18,
+    threshold: 0.14,
     rootMargin: '0px 0px -8% 0px'
   });
 
   sections.forEach((section) => observer.observe(section));
 }
 
+function setupTypingTitle() {
+  const typingTitle = document.getElementById('typing-title');
+  if (!typingTitle) {
+    return;
+  }
+
+  const text = 'Portfolio';
+  if (prefersReducedMotion) {
+    typingTitle.textContent = text;
+    return;
+  }
+
+  let index = 0;
+  const section = document.getElementById('portfolio');
+  if (!section) {
+    typingTitle.textContent = text;
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting || typingTitle.textContent) {
+        return;
+      }
+
+      const typeNext = () => {
+        typingTitle.textContent += text.charAt(index);
+        index += 1;
+        if (index < text.length) {
+          window.setTimeout(typeNext, 85);
+        }
+      };
+
+      typeNext();
+      observer.disconnect();
+    });
+  }, { threshold: 0.4 });
+
+  observer.observe(section);
+}
+
 function setupHeroParallax() {
-  if (!heroImage || prefersReducedMotion) return;
+  const heroVisual = document.querySelector('.hero-image-panel');
+  if (!heroVisual || prefersReducedMotion) {
+    return;
+  }
 
   const updateParallax = () => {
-    const offset = Math.min(window.scrollY * 0.08, 36);
-    heroImage.style.transform = `translate3d(0, ${offset}px, 0) scale(1.03)`;
+    const offset = Math.min(window.scrollY * 0.045, 18);
+    heroVisual.style.transform = `translateY(${offset}px)`;
   };
 
   updateParallax();
   window.addEventListener('scroll', updateParallax, { passive: true });
 }
 
-function setupTypingTitle() {
-  if (!typingTitle) return;
-
-  const titleText = 'Selected Work';
-  let index = 0;
-  let started = false;
-
-  const type = () => {
-    if (index < titleText.length) {
-      typingTitle.textContent += titleText.charAt(index);
-      index += 1;
-      window.setTimeout(type, 72);
-    }
-  };
-
-  const portfolioSection = document.getElementById('portfolio');
-  if (!portfolioSection) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting && !started) {
-        started = true;
-        type();
-      }
-    });
-  }, { threshold: 0.35 });
-
-  observer.observe(portfolioSection);
-}
-
 function setupExpandablePanels() {
-  document.querySelectorAll('.expand-arrow').forEach((button) => {
+  const buttons = document.querySelectorAll('.expand-arrow');
+  if (!buttons.length) {
+    return;
+  }
+
+  buttons.forEach((button) => {
     button.addEventListener('click', (event) => {
       event.preventDefault();
+      event.stopPropagation();
+
       const panelId = button.getAttribute('aria-controls');
-      const panel = panelId ? document.getElementById(panelId) : null;
-      if (!panel) return;
+      const panel = document.getElementById(panelId);
+      if (!panel) {
+        return;
+      }
 
       const isExpanded = button.getAttribute('aria-expanded') === 'true';
       button.setAttribute('aria-expanded', String(!isExpanded));
@@ -102,228 +123,83 @@ function setupExpandablePanels() {
 
 function initCarousel(carouselId) {
   const carousel = document.getElementById(carouselId);
-  if (!carousel) return;
+  if (!carousel) {
+    return;
+  }
 
   const images = Array.from(carousel.querySelectorAll('img'));
-  const prevButton = carousel.querySelector('.prev');
-  const nextButton = carousel.querySelector('.next');
-  if (!images.length) return;
+  const prev = carousel.querySelector('.prev');
+  const next = carousel.querySelector('.next');
+  if (!images.length || !prev || !next) {
+    return;
+  }
 
-  let currentIndex = 0;
+  let index = 0;
 
-  const showImage = (index) => {
+  const render = () => {
     images.forEach((image, imageIndex) => {
-      image.style.display = imageIndex === index ? 'block' : 'none';
+      image.hidden = imageIndex !== index;
     });
   };
 
-  showImage(currentIndex);
-
-  prevButton?.addEventListener('click', (event) => {
+  prev.addEventListener('click', (event) => {
     event.preventDefault();
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    showImage(currentIndex);
+    event.stopPropagation();
+    index = (index - 1 + images.length) % images.length;
+    render();
   });
 
-  nextButton?.addEventListener('click', (event) => {
+  next.addEventListener('click', (event) => {
     event.preventDefault();
-    currentIndex = (currentIndex + 1) % images.length;
-    showImage(currentIndex);
+    event.stopPropagation();
+    index = (index + 1) % images.length;
+    render();
   });
+
+  render();
 }
 
 function setupCarousels() {
   ['modelling-carousel', 'sports-carousel', 'automotive-carousel', 'others-carousel'].forEach(initCarousel);
 }
 
-function setupVideoAvailability() {
-  const video = document.getElementById('videography-video');
-  const placeholder = document.getElementById('video-placeholder');
-  const videoSource = video?.querySelector('source');
-  if (!video || !placeholder || !videoSource) return;
-
-  fetch(videoSource.src, { method: 'HEAD' })
-    .then((response) => {
-      const hasVideo = response.ok;
-      video.style.display = hasVideo ? 'block' : 'none';
-      placeholder.style.display = hasVideo ? 'none' : 'block';
-    })
-    .catch(() => {
-      video.style.display = 'none';
-      placeholder.style.display = 'block';
-    });
-}
-
-function setupCursor() {
-  if (!supportsFinePointer || prefersReducedMotion) return;
-
-  const cursor = document.createElement('div');
-  cursor.id = 'custom-cursor';
-  document.body.appendChild(cursor);
-  document.body.classList.add('cursor-active');
-
-  document.addEventListener('mousemove', (event) => {
-    cursor.style.left = `${event.clientX}px`;
-    cursor.style.top = `${event.clientY}px`;
-  });
-
-  document.addEventListener('mousedown', () => {
-    document.body.classList.add('cursor-pressed');
-  });
-
-  document.addEventListener('mouseup', () => {
-    document.body.classList.remove('cursor-pressed');
-  });
-}
-
-function setupTiltCards() {
-  if (!supportsFinePointer || prefersReducedMotion) return;
-
-  const cards = document.querySelectorAll('[data-tilt-card]');
-  cards.forEach((card) => {
-    card.addEventListener('mousemove', (event) => {
-      const rect = card.getBoundingClientRect();
-      const offsetX = (event.clientX - rect.left) / rect.width;
-      const offsetY = (event.clientY - rect.top) / rect.height;
-      const rotateY = (offsetX - 0.5) * 8;
-      const rotateX = (0.5 - offsetY) * 6;
-      card.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translate3d(0, -2px, 0)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
-  });
-}
-
-function setupParticles() {
-  if (prefersReducedMotion) return;
-
-  const canvas = document.getElementById('particles-canvas');
-  if (!canvas) return;
-
-  const context = canvas.getContext('2d');
-  if (!context) return;
-
-  const pointer = {
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2,
-    active: false
-  };
-
-  let particles = [];
-  let animationFrame = 0;
-
-  const resize = () => {
-    const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
-    canvas.width = Math.floor(window.innerWidth * ratio);
-    canvas.height = Math.floor(window.innerHeight * ratio);
-    canvas.style.width = `${window.innerWidth}px`;
-    canvas.style.height = `${window.innerHeight}px`;
-    context.setTransform(ratio, 0, 0, ratio, 0, 0);
-
-    const particleCount = window.innerWidth < 700 ? 22 : 38;
-    particles = Array.from({ length: particleCount }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * 0.22,
-      vy: (Math.random() - 0.5) * 0.22,
-      radius: Math.random() * 1.8 + 0.8
-    }));
-  };
-
-  const draw = () => {
-    context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
-    particles.forEach((particle, index) => {
-      particle.x += particle.vx;
-      particle.y += particle.vy;
-
-      if (particle.x < -10) particle.x = window.innerWidth + 10;
-      if (particle.x > window.innerWidth + 10) particle.x = -10;
-      if (particle.y < -10) particle.y = window.innerHeight + 10;
-      if (particle.y > window.innerHeight + 10) particle.y = -10;
-
-      if (pointer.active) {
-        const dx = pointer.x - particle.x;
-        const dy = pointer.y - particle.y;
-        const distance = Math.hypot(dx, dy);
-        if (distance < 160 && distance > 0) {
-          particle.x -= (dx / distance) * 0.25;
-          particle.y -= (dy / distance) * 0.25;
-        }
-      }
-
-      context.beginPath();
-      context.fillStyle = index % 3 === 0 ? 'rgba(255, 94, 58, 0.65)' : 'rgba(104, 215, 255, 0.55)';
-      context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-      context.fill();
-    });
-
-    animationFrame = window.requestAnimationFrame(draw);
-  };
-
-  resize();
-  draw();
-
-  window.addEventListener('resize', resize);
-  window.addEventListener('mousemove', (event) => {
-    pointer.x = event.clientX;
-    pointer.y = event.clientY;
-    pointer.active = true;
-  }, { passive: true });
-  window.addEventListener('mouseleave', () => {
-    pointer.active = false;
-  });
-
-  window.addEventListener('beforeunload', () => {
-    window.cancelAnimationFrame(animationFrame);
-  });
-}
-
-function setupLoader() {
-  const loader = document.createElement('div');
-  loader.id = 'loader';
-  loader.innerHTML = '<div class="loader-bg"></div><div class="loader-text">Loading...</div>';
-  document.body.appendChild(loader);
-
-  window.setTimeout(() => loader.classList.add('fade'), 900);
-  window.setTimeout(() => loader.remove(), 1450);
-}
-
 function setupChat() {
-  if (!chatMessages || !chatInput || !sendButton) return;
+  const chatMessages = document.getElementById('chat-messages');
+  const chatInput = document.getElementById('chat-input');
+  const sendButton = document.getElementById('send-button');
+
+  if (!chatMessages || !chatInput || !sendButton) {
+    return;
+  }
 
   const addMessage = (content, type) => {
-    const message = document.createElement('div');
-    message.className = `message ${type}`;
-    message.textContent = content;
-    chatMessages.appendChild(message);
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type}`;
+    messageDiv.textContent = content;
+    chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
   };
 
-  const getApiBase = () => {
-    const apiMeta = document.querySelector('meta[name="api-base-url"]');
-    const configuredApiBase = apiMeta ? apiMeta.content.trim() : '';
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return 'http://localhost:8003';
-    }
-    return configuredApiBase;
-  };
-
   const sendMessage = async () => {
-    const query = chatInput.value.trim();
-    if (!query) return;
+    const message = chatInput.value.trim();
+    if (!message) {
+      return;
+    }
 
-    const apiBase = getApiBase();
-    addMessage(query, 'user');
+    addMessage(message, 'user');
     chatInput.value = '';
     sendButton.disabled = true;
     sendButton.textContent = 'Sending...';
 
     try {
+      const apiMeta = document.querySelector('meta[name="api-base-url"]');
+      const configuredApiBase = apiMeta ? apiMeta.content.trim() : '';
+      const apiBase = window.location.hostname === 'localhost'
+        ? 'http://localhost:8003'
+        : configuredApiBase;
+
       if (!apiBase) {
-        throw new Error('Missing backend URL');
+        throw new Error('Backend URL is missing. Set meta[name="api-base-url"] in index.html');
       }
 
       const response = await fetch(`${apiBase}/api/chat`, {
@@ -331,18 +207,18 @@ function setupChat() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ query })
+        body: JSON.stringify({ query: message })
       });
 
       if (!response.ok) {
-        throw new Error(`Chat request failed with status ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const payload = await response.json();
-      addMessage(payload.answer, 'assistant');
+      const data = await response.json();
+      addMessage(data.answer, 'assistant');
     } catch (error) {
-      console.error(error);
-      addMessage('Sorry, I hit an error while answering. Please try again in a moment.', 'assistant');
+      console.error('Chat error:', error);
+      addMessage('Sorry, I hit a connection issue. Please try again in a moment.', 'assistant');
     } finally {
       sendButton.disabled = false;
       sendButton.textContent = 'Send';
@@ -350,28 +226,161 @@ function setupChat() {
   };
 
   sendButton.addEventListener('click', sendMessage);
-  chatInput.addEventListener('keydown', (event) => {
+  chatInput.addEventListener('keypress', (event) => {
     if (event.key === 'Enter') {
       sendMessage();
     }
   });
 
-  addMessage("Hello. I'm Moazzam's AI assistant. Ask about services, booking, photography, editing, or AI development.", 'assistant');
+  addMessage('Hello. Ask about services, pricing, availability in Krachi, or project workflow.', 'assistant');
+}
+
+function setupVideoFallback() {
+  const video = document.getElementById('videography-video');
+  const placeholder = document.getElementById('video-placeholder');
+  if (!video || !placeholder) {
+    return;
+  }
+
+  const source = video.querySelector('source');
+  if (!source) {
+    return;
+  }
+
+  fetch(source.src, { method: 'HEAD' })
+    .then((response) => {
+      if (response.ok) {
+        video.style.display = 'block';
+        placeholder.style.display = 'none';
+      }
+    })
+    .catch(() => {
+      video.style.display = 'none';
+      placeholder.style.display = 'grid';
+    });
+}
+
+function setupTilt() {
+  const tiltItems = document.querySelectorAll('.tilt-shell');
+  if (!tiltItems.length || prefersReducedMotion) {
+    return;
+  }
+
+  tiltItems.forEach((item) => {
+    const intensity = Number(item.dataset.tiltIntensity || 4);
+
+    item.addEventListener('mousemove', (event) => {
+      const rect = item.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+      const rotateX = (0.5 - y) * intensity;
+      const rotateY = (x - 0.5) * intensity;
+      item.classList.add('is-touching');
+      item.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-2px)`;
+    });
+
+    item.addEventListener('mouseleave', () => {
+      item.classList.remove('is-touching');
+      item.style.transform = '';
+    });
+  });
+}
+
+function setupParticles() {
+  const canvas = document.getElementById('particle-canvas');
+  if (!canvas || prefersReducedMotion) {
+    return;
+  }
+
+  const context = canvas.getContext('2d');
+  if (!context) {
+    return;
+  }
+
+  const particles = [];
+  const particleCount = window.innerWidth < 700 ? 28 : 50;
+  let pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+  const resize = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+
+  const createParticle = () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: Math.random() * 1.7 + 0.6,
+    speedX: (Math.random() - 0.5) * 0.22,
+    speedY: (Math.random() - 0.5) * 0.22,
+    depth: Math.random() * 0.6 + 0.4
+  });
+
+  resize();
+  for (let index = 0; index < particleCount; index += 1) {
+    particles.push(createParticle());
+  }
+
+  const render = () => {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach((particle) => {
+      const dx = pointer.x - particle.x;
+      const dy = pointer.y - particle.y;
+      const distance = Math.hypot(dx, dy);
+      const force = distance < 140 ? (140 - distance) / 1400 : 0;
+
+      particle.x += particle.speedX - dx * force * 0.03 * particle.depth;
+      particle.y += particle.speedY - dy * force * 0.03 * particle.depth;
+
+      if (particle.x < -10) particle.x = canvas.width + 10;
+      if (particle.x > canvas.width + 10) particle.x = -10;
+      if (particle.y < -10) particle.y = canvas.height + 10;
+      if (particle.y > canvas.height + 10) particle.y = -10;
+
+      context.beginPath();
+      context.fillStyle = 'rgba(255, 255, 255, 0.55)';
+      context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+      context.fill();
+    });
+
+    for (let firstIndex = 0; firstIndex < particles.length; firstIndex += 1) {
+      for (let secondIndex = firstIndex + 1; secondIndex < particles.length; secondIndex += 1) {
+        const first = particles[firstIndex];
+        const second = particles[secondIndex];
+        const distance = Math.hypot(first.x - second.x, first.y - second.y);
+        if (distance < 110) {
+          context.beginPath();
+          context.strokeStyle = `rgba(255, 255, 255, ${(1 - distance / 110) * 0.09})`;
+          context.lineWidth = 1;
+          context.moveTo(first.x, first.y);
+          context.lineTo(second.x, second.y);
+          context.stroke();
+        }
+      }
+    }
+
+    window.requestAnimationFrame(render);
+  };
+
+  window.addEventListener('resize', resize);
+  window.addEventListener('pointermove', (event) => {
+    pointer = { x: event.clientX, y: event.clientY };
+  }, { passive: true });
+
+  render();
 }
 
 function init() {
-  setupLoader();
-  setupMobileMenu();
-  setupSectionReveal();
-  setupHeroParallax();
+  setupNavigation();
+  setupRevealSections();
   setupTypingTitle();
+  setupHeroParallax();
   setupExpandablePanels();
   setupCarousels();
-  setupVideoAvailability();
-  setupCursor();
-  setupTiltCards();
-  setupParticles();
   setupChat();
+  setupVideoFallback();
+  setupTilt();
+  setupParticles();
 }
 
 if (document.readyState === 'loading') {

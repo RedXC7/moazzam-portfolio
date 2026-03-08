@@ -6,27 +6,21 @@
     <title>Muhammad Moazzam Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Expletus+Sans:wght@400;500;600;700&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Expletus+Sans:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
     <meta name="api-base-url" content="https://fc9c77e1-8772-4f78-bcbe-0a9c7b51f913-00-um5ke8vial1g.sisko.replit.dev:8000">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="site-background" aria-hidden="true">
-        <div class="gradient-orb orb-a"></div>
-        <div class="gradient-orb orb-b"></div>
-        <canvas id="particles-canvas"></canvas>
-        <div class="waves">
-            <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
-                <path class="wave wave-back" d="M0,160L60,170.7C120,181,240,203,360,197.3C480,192,600,160,720,160C840,160,960,192,1080,197.3C1200,203,1320,181,1380,170.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
-                <path class="wave wave-front" d="M0,224L60,202.7C120,181,240,139,360,122.7C480,107,600,117,720,144C840,171,960,213,1080,224C1200,235,1320,213,1380,202.7L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
-            </svg>
-        </div>
-    </div>
+    <div class="bg-gradient" aria-hidden="true"></div>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+    <div class="wave-layer" aria-hidden="true"></div>
+    <div class="orb orb-left" aria-hidden="true"></div>
+    <div class="orb orb-right" aria-hidden="true"></div>
 
     <header id="hero">
         <nav>
             <div class="logo">Moazzam</div>
-            <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+            <button class="menu-toggle" type="button" aria-label="Toggle navigation">☰</button>
             <ul class="nav-links">
                 <li><a href="#portfolio">Portfolio</a></li>
                 <li><a href="#services">Services</a></li>
@@ -34,106 +28,132 @@
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
-        <div class="hero-shell">
-            <div class="hero-copy glass-panel" data-tilt-card>
-                <span class="eyebrow">Creative Direction • Visual Storytelling • AI Workflow</span>
-                <h1>Muhammad Moazzam</h1>
-                <p>I build cinematic visuals, clean digital campaigns, and practical AI tools with a science-driven mindset. The result is creative work that looks intentional and performs well across real client needs.</p>
-                <div class="hero-meta">
-                    <span>Videography</span>
-                    <span>Photography</span>
-                    <span>Editing</span>
-                    <span>Agentic AI</span>
+
+        <div class="hero-frame">
+            <div class="hero-copy">
+                <p class="eyebrow">Visual Storytelling + Agentic AI</p>
+                <h1>Creative work shaped with precision, motion, and modern systems.</h1>
+                <p class="hero-text">Muhammad Moazzam blends photography, filmmaking, editing, digital marketing, and custom AI workflows into a compact portfolio built for bold presentation and smooth interaction.</p>
+                <div class="hero-actions">
+                    <a href="#services" class="button button-primary">Explore Services</a>
+                    <a href="#ai-assistant" class="button button-secondary">Ask the Assistant</a>
+                </div>
+                <div class="hero-metrics">
+                    <div class="metric-card">
+                        <span class="metric-value">5</span>
+                        <span class="metric-label">Creative disciplines</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">Krachi</span>
+                        <span class="metric-label">Physical service base</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">AI</span>
+                        <span class="metric-label">Workflow-ready support</span>
+                    </div>
                 </div>
             </div>
-            <div class="hero-visual glass-panel" data-tilt-card>
-                <div class="hero-image"></div>
-                <div class="hero-visual-caption">
-                    <strong>Now available for selected creative work</strong>
-                    <p>Fast-moving visuals, careful post-production, and client-friendly delivery.</p>
+            <div class="hero-visual tilt-shell" data-tilt-intensity="6">
+                <div class="hero-image-panel">
+                    <img src="profile.jpg" alt="Muhammad Moazzam portrait">
                 </div>
+                <div class="floating-badge badge-top">Film + Photo + Systems</div>
+                <div class="floating-badge badge-bottom">Responsive visual portfolio</div>
             </div>
         </div>
     </header>
 
     <main>
-        <section id="portfolio" class="section reveal-section">
-            <div class="section-header">
-                <span class="eyebrow">Portfolio</span>
+        <section id="portfolio" class="section panel-section reveal-section">
+            <div class="section-heading">
+                <p class="eyebrow">Portfolio</p>
                 <h2 id="typing-title"></h2>
-                <p class="section-lead">A multidisciplinary portfolio focused on strong visuals, efficient execution, and ideas that connect science, storytelling, and technology.</p>
             </div>
-            <div class="portfolio-intro glass-panel" data-tilt-card>
-                <div class="profile-image-box">
+
+            <div class="portfolio-layout">
+                <div class="profile-image-box tilt-shell" data-tilt-intensity="5">
                     <img src="profile.jpg" alt="Muhammad Moazzam">
                 </div>
-                <div class="intro-text">
-                    <p>I am an O Levels student with a deep interest in how systems work, from the quantum scale to biology and applied technology. That curiosity shapes how I approach creative work as well: with structure, experimentation, and attention to detail.</p>
-                    <p>I work across videography, photography, editing, digital marketing, and agentic AI development. I also manage my own social media presence and build tools that improve creative workflows instead of slowing them down.</p>
+
+                <div class="portfolio-content">
+                    <p>I am an O Levels student with a deep curiosity for how things work, from the quantum realm to complex biological systems. That same curiosity shapes my creative process, where I combine science, technology, filmmaking, photography, and editing into work that feels precise and expressive.</p>
+                    <p>Beyond the sciences, I have hands-on experience in the filming industry, cybersecurity, and agentic AI development. I work at the point where visuals, systems, and creative experimentation meet, always looking for sharper ways to build and present ideas.</p>
+
+                    <div class="detail-grid">
+                        <div class="detail-card">
+                            <span class="detail-label">Name</span>
+                            <span class="detail-value">Muhammad Moazzam</span>
+                        </div>
+                        <div class="detail-card">
+                            <span class="detail-label">Email</span>
+                            <a class="detail-value" href="mailto:muhammad.moazzam635@gmail.com">muhammad.moazzam635@gmail.com</a>
+                        </div>
+                        <div class="detail-card detail-card-wide">
+                            <span class="detail-label">Specialties</span>
+                            <span class="detail-value">Videography, filmmaking, photography, post-production, digital marketing, and agentic AI development.</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="details-grid">
-                <article class="detail-card glass-panel">
-                    <h3>Profile</h3>
-                    <p><strong>Name:</strong> Muhammad Moazzam</p>
-                    <p><strong>Email:</strong> <a href="mailto:muhammad.moazzam635@gmail.com">muhammad.moazzam635@gmail.com</a></p>
-                </article>
-                <article class="detail-card glass-panel">
-                    <h3>Specialties</h3>
-                    <p>Videography, filmmaking, photography, video and photo editing, agentic AI development, and digital marketing.</p>
-                </article>
-                <article class="detail-card glass-panel">
-                    <h3>Approach</h3>
-                    <p>Clear communication, polished creative direction, and technical thinking that keeps projects efficient from concept to final delivery.</p>
-                </article>
             </div>
         </section>
 
-        <section id="services" class="section reveal-section">
-            <div class="section-header">
-                <span class="eyebrow">Services</span>
+        <section id="services" class="section panel-section reveal-section">
+            <div class="section-heading">
+                <p class="eyebrow">Services</p>
                 <h2>Services Provided</h2>
-                <p class="section-lead">Paid creative and digital services, tailored per project. Reach out by email for quotations, timelines, and scope discussion.</p>
+                <p class="section-intro">Paid creative and technical services tailored for brands, individuals, and projects that need strong visuals with efficient execution.</p>
             </div>
 
             <div class="services-grid">
-                <article class="service-card glass-panel" id="videography-card" data-tilt-card>
+                <article class="service-card tilt-shell" id="videography-card" data-tilt-intensity="4">
                     <div class="service-header">
                         <div>
-                            <span>Videography</span>
-                            <p class="service-summary">Cinematic reels, event coverage, and visual storytelling with polished post-production.</p>
+                            <span class="service-kicker">Motion</span>
+                            <span class="service-title">Videography</span>
                         </div>
-                        <button class="expand-arrow" aria-expanded="false" aria-controls="videography-panel">&#9660;</button>
+                        <button class="expand-arrow" type="button" aria-expanded="false" aria-controls="videography-panel">&#9660;</button>
                     </div>
+                    <p class="service-summary">Short-form visuals, coverage, cinematic edits, and branded video built with a polished, modern finish.</p>
                     <div class="service-panel" id="videography-panel">
-                        <div class="service-mini-note">
-                            <h4>Physical Shoots</h4>
-                            <p>On-site videography is currently available in Krachi, Pakistan.</p>
-                        </div>
-                        <div id="video-container" class="media-frame">
+                        <div class="media-stage" id="video-container">
                             <video id="videography-video" controls preload="none">
                                 <source src="video.mp4" type="video/mp4">
                             </video>
-                            <p id="video-placeholder">Video showcase will appear here once the file is uploaded.</p>
+                            <p id="video-placeholder">Video will appear here once uploaded.</p>
                         </div>
-                        <p>This section highlights one finalized project. More edited and published work can be shared directly on request.</p>
+                        <p class="panel-copy">A preview area for finished work, edits, and publicly showcased projects, with more pieces being added over time.</p>
+                        <div class="service-note-stack">
+                            <div class="service-note">
+                                <span class="service-note-label">Physical availability</span>
+                                <span class="service-note-text">Currently available in Krachi, Pakistan for on-site videography work.</span>
+                            </div>
+                            <div class="service-note service-note-subtle">
+                                <span class="service-note-label">Remote support</span>
+                                <span class="service-note-text">Planning, direction, edits, and consultation can still be discussed remotely.</span>
+                            </div>
+                        </div>
                     </div>
                 </article>
 
-                <article class="service-card glass-panel" id="photography-card" data-tilt-card>
+                <article class="service-card tilt-shell" id="photography-card" data-tilt-intensity="4">
                     <div class="service-header">
                         <div>
-                            <span>Photography</span>
-                            <p class="service-summary">Portraits, sports, automotive, and fashion-focused image sets captured with a DSLR workflow.</p>
+                            <span class="service-kicker">Still</span>
+                            <span class="service-title">Photography</span>
                         </div>
-                        <button class="expand-arrow" aria-expanded="false" aria-controls="photography-panel">&#9660;</button>
+                        <button class="expand-arrow" type="button" aria-expanded="false" aria-controls="photography-panel">&#9660;</button>
                     </div>
+                    <p class="service-summary">Portraits, sports, automotive, and editorial visuals framed for clarity, atmosphere, and identity.</p>
                     <div class="service-panel" id="photography-panel">
-                        <div class="service-mini-note">
-                            <h4>Physical Shoots</h4>
-                            <p>On-site photography is currently available in Krachi, Pakistan.</p>
+                        <p class="panel-copy">A selection of DSLR photography across modelling, sports, automotive, and other visual studies.</p>
+
+                        <div class="service-note-stack service-note-stack-tight">
+                            <div class="service-note">
+                                <span class="service-note-label">Physical availability</span>
+                                <span class="service-note-text">On-site photography bookings are currently available in Krachi, Pakistan only.</span>
+                            </div>
                         </div>
-                        <p>Selected DSLR work across different styles and subjects.</p>
+
                         <div class="photo-category">
                             <h4>Modelling Photography</h4>
                             <div class="photo-carousel" id="modelling-carousel">
@@ -141,8 +161,194 @@
                                 <img src="IMG_20240312_231345_529.jpg" alt="Modelling Photo 2" loading="lazy">
                                 <img src="IMG_3453-1.jpg" alt="Modelling Photo 3" loading="lazy">
                                 <img src="IMG_3454-2.jpg" alt="Modelling Photo 4" loading="lazy">
-                                <button class="prev" aria-label="Previous modelling image">&lt;</button>
-                                <button class="next" aria-label="Next modelling image">&gt;</button>
+                                <button class="prev" type="button" aria-label="Previous modelling photo">&lt;</button>
+                                <button class="next" type="button" aria-label="Next modelling photo">&gt;</button>
+                            </div>
+                        </div>
+
+                        <div class="photo-category">
+                            <h4>Sports Photography</h4>
+                            <div class="photo-carousel" id="sports-carousel">
+                                <img src="IMG_20240127_220705_021.jpg" alt="Sports Photo 1" loading="lazy">
+                                <img src="IMG_20240127_220705_130.jpg" alt="Sports Photo 2" loading="lazy">
+                                <button class="prev" type="button" aria-label="Previous sports photo">&lt;</button>
+                                <button class="next" type="button" aria-label="Next sports photo">&gt;</button>
+                            </div>
+                        </div>
+
+                        <div class="photo-category">
+                            <h4>Automotive Photography</h4>
+                            <div class="photo-carousel" id="automotive-carousel">
+                                <img src="IMG_20240414_153317_776.jpg" alt="Automotive Photo 1" loading="lazy">
+                                <img src="IMG_20240523_140515_609.jpg" alt="Automotive Photo 2" loading="lazy">
+                                <button class="prev" type="button" aria-label="Previous automotive photo">&lt;</button>
+                                <button class="next" type="button" aria-label="Next automotive photo">&gt;</button>
+                            </div>
+                        </div>
+
+                        <div class="photo-category">
+                            <h4>Others</h4>
+                            <div class="photo-carousel" id="others-carousel">
+                                <img src="20260301_163351.jpg" alt="Other Photo 1" loading="lazy">
+                                <img src="IMG_3364.jpg" alt="Other Photo 2" loading="lazy">
+                                <button class="prev" type="button" aria-label="Previous other photo">&lt;</button>
+                                <button class="next" type="button" aria-label="Next other photo">&gt;</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="service-card tilt-shell service-card-static" data-tilt-intensity="3">
+                    <div class="service-header service-header-static">
+                        <div>
+                            <span class="service-kicker">Post</span>
+                            <span class="service-title">Video &amp; Photo Editing</span>
+                        </div>
+                    </div>
+                    <p class="service-summary">Clean cuts, color refinement, pacing, and visual polishing for footage or imagery you already have.</p>
+                </article>
+
+                <article class="service-card tilt-shell service-card-static" data-tilt-intensity="3">
+                    <div class="service-header service-header-static">
+                        <div>
+                            <span class="service-kicker">Growth</span>
+                            <span class="service-title">Digital Marketing</span>
+                        </div>
+                    </div>
+                    <p class="service-summary">Social content planning, visual consistency, audience-facing creative direction, and practical digital presence support.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="ai-assistant" class="section panel-section reveal-section">
+            <div class="section-heading">
+                <p class="eyebrow">Assistant</p>
+                <h2>AI Assistant</h2>
+                <p class="section-intro">Ask about services, pricing flow, style, location availability, or how the workflow is structured.</p>
+            </div>
+
+            <div class="chat-shell tilt-shell" data-tilt-intensity="3">
+                <div class="chat-container">
+                    <div id="chat-messages" class="chat-messages"></div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" placeholder="Ask about services, availability, pricing, or process">
+                        <button id="send-button" type="button">Send</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section panel-section reveal-section">
+            <div class="section-heading">
+                <p class="eyebrow">Contact</p>
+                <h2>Contact &amp; Socials</h2>
+                <p class="section-intro">Reach out directly for quotations, collaborations, or project planning.</p>
+            </div>
+
+            <div class="contact-grid">
+                <a href="mailto:muhammad.moazzam635@gmail.com" class="contact-item tilt-shell" target="_blank" rel="noreferrer">
+                    <span class="icon">📧</span>
+                    <span>Email</span>
+                </a>
+                <a href="https://www.instagram.com/mox.shots/" class="contact-item tilt-shell" target="_blank" rel="noreferrer">
+                    <span class="icon">📷</span>
+                    <span>Instagram</span>
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61560097457858" class="contact-item tilt-shell" target="_blank" rel="noreferrer">
+                    <span class="icon">📘</span>
+                    <span>Facebook</span>
+                </a>
+                <a href="https://www.linkedin.com/in/muhammad-moazzam-230143372/" class="contact-item tilt-shell" target="_blank" rel="noreferrer">
+                    <span class="icon">💼</span>
+                    <span>LinkedIn</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhammad Moazzam Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Expletus+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="api-base-url" content="https://fc9c77e1-8772-4f78-bcbe-0a9c7b51f913-00-um5ke8vial1g.sisko.replit.dev:8000">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header id="hero">
+        <nav>
+            <div class="logo">Moazzam</div>
+            <div class="menu-toggle">☰</div>
+            <ul class="nav-links">
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#services">Services Provided</a></li>
+                <li><a href="#ai-assistant">AI Assistant</a></li>
+                <li><a href="#contact">Contact &amp; Socials</a></li>
+            </ul>
+        </nav>
+        <div class="hero-image"></div>
+        <div class="hero-overlay"></div>
+    </header>
+
+    <main>
+        <section id="portfolio" class="section">
+            <h2 id="typing-title"></h2>
+            <div class="portfolio-intro">
+                <div class="profile-image-box">
+                    <img src="profile.jpg" alt="Muhammad Moazzam">
+                </div>
+                <div class="intro-text">
+                    <p>I am an O Levels student with a deep passion for understanding how things work—from the quantum realm to complex biological systems. Excelling in Physics, Mathematics, and Biology has given me a strong foundation to explore the applications of quantum physics and molecular biology in building a sustainable future. Beyond the sciences, I am a tech enthusiast and creative, with hands-on experience in the filming industry, cybersecurity, and developing agentic AI. I thrive at the intersection of science, technology, and creativity, always looking for ways to innovate and solve real-world problems.</p>
+                </div>
+            </div>
+            <p>Name: Muhammad Moazzam</p>
+            <p>Email: <a href="mailto:muhammad.moazzam635@gmail.com">muhammad.moazzam635@gmail.com</a></p>
+            <p>Specialties: Videography, Film Making, Photography, video and photo editing, agentic ai development, Digital marketing</p>
+            <p>I am an artist and a creator managing my own social media presence on Instagram &amp; Facebook. I specialize in photography, filmmaking, and video editing, and have built a custom AI agent to enhance my creative workflow.</p>
+        </section>
+
+        <section id="services" class="section">
+            <h2>Services Provided</h2>
+            <p>All services are paid. Email for quotation and to avail these services now.</p>
+            <div class="services-grid">
+                <div class="service-card" id="videography-card">
+                    <div class="service-header">
+                        <span>Videography</span>
+                        <button class="expand-arrow" aria-expanded="false" aria-controls="videography-panel">&#9660;</button>
+                    </div>
+                    <div class="service-panel" id="videography-panel">
+                        <div id="video-container" style="background: #1a1a1a; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 15px;">
+                            <video id="videography-video" controls preload="none" style="width: 100%; max-height: 400px; display: none;">
+                                <source src="video.mp4" type="video/mp4">
+                            </video>
+                            <p id="video-placeholder" style="color: #999; padding: 40px 20px; margin: 0;">📹 Video file will be displayed here once uploaded</p>
+                        </div>
+                        <p>This is one of my finalized projects with some editing which have been publicly showcased and there are many more projects upcoming.</p>
+                    </div>
+                </div>
+                <div class="service-card" id="photography-card">
+                    <div class="service-header">
+                        <span>Photography</span>
+                        <button class="expand-arrow" aria-expanded="false" aria-controls="photography-panel">&#9660;</button>
+                    </div>
+                    <div class="service-panel" id="photography-panel">
+                        <p>These are some of the photographs which I took using my DSLR.</p>
+                        <div class="photo-category">
+                            <h4>Modelling Photography</h4>
+                            <div class="photo-carousel" id="modelling-carousel">
+                                <img src="IMG_20240312_231345_449.jpg" alt="Modelling Photo 1" loading="lazy">
+                                <img src="IMG_20240312_231345_529.jpg" alt="Modelling Photo 2" loading="lazy">
+                                <img src="IMG_3453-1.jpg" alt="Modelling Photo 3" loading="lazy">
+                                <img src="IMG_3454-2.jpg" alt="Modelling Photo 4" loading="lazy">
+                                <button class="prev">&lt;</button>
+                                <button class="next">&gt;</button>
                             </div>
                         </div>
                         <div class="photo-category">
@@ -150,8 +356,8 @@
                             <div class="photo-carousel" id="sports-carousel">
                                 <img src="IMG_20240127_220705_021.jpg" alt="Sports Photo 1" loading="lazy">
                                 <img src="IMG_20240127_220705_130.jpg" alt="Sports Photo 2" loading="lazy">
-                                <button class="prev" aria-label="Previous sports image">&lt;</button>
-                                <button class="next" aria-label="Next sports image">&gt;</button>
+                                <button class="prev">&lt;</button>
+                                <button class="next">&gt;</button>
                             </div>
                         </div>
                         <div class="photo-category">
@@ -159,8 +365,8 @@
                             <div class="photo-carousel" id="automotive-carousel">
                                 <img src="IMG_20240414_153317_776.jpg" alt="Automotive Photo 1" loading="lazy">
                                 <img src="IMG_20240523_140515_609.jpg" alt="Automotive Photo 2" loading="lazy">
-                                <button class="prev" aria-label="Previous automotive image">&lt;</button>
-                                <button class="next" aria-label="Next automotive image">&gt;</button>
+                                <button class="prev">&lt;</button>
+                                <button class="next">&gt;</button>
                             </div>
                         </div>
                         <div class="photo-category">
@@ -168,60 +374,38 @@
                             <div class="photo-carousel" id="others-carousel">
                                 <img src="20260301_163351.jpg" alt="Other Photo 1" loading="lazy">
                                 <img src="IMG_3364.jpg" alt="Other Photo 2" loading="lazy">
-                                <button class="prev" aria-label="Previous other image">&lt;</button>
-                                <button class="next" aria-label="Next other image">&gt;</button>
+                                <button class="prev">&lt;</button>
+                                <button class="next">&gt;</button>
                             </div>
                         </div>
                     </div>
-                </article>
-
-                <article class="service-card glass-panel" data-tilt-card>
-                    <div class="service-header service-header-static">
-                        <div>
-                            <span>Video &amp; Photo Editing</span>
-                            <p class="service-summary">Editing support for your own raw footage or full post-production for complete projects.</p>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="service-card glass-panel" data-tilt-card>
-                    <div class="service-header service-header-static">
-                        <div>
-                            <span>Digital Marketing</span>
-                            <p class="service-summary">Content planning, creative direction, and social-first campaign support shaped for audience growth.</p>
-                        </div>
-                    </div>
-                </article>
+                </div>
+                <div class="service-card">Video &amp; Photo Editing</div>
+                <div class="service-card">Digital Marketing</div>
             </div>
         </section>
 
-        <section id="ai-assistant" class="section reveal-section">
-            <div class="section-header">
-                <span class="eyebrow">Assistant</span>
-                <h2>AI Assistant</h2>
-                <p class="section-lead">Ask about services, project flow, availability, or the kind of creative and AI work Moazzam offers.</p>
-            </div>
-            <div class="chat-container glass-panel" data-tilt-card>
+        <section id="ai-assistant" class="section">
+            <h2>AI Assistant</h2>
+            <p>Chat with my AI assistant to learn more about my services and portfolio!</p>
+            <div class="chat-container">
                 <div id="chat-messages" class="chat-messages"></div>
                 <div class="chat-input-container">
-                    <input type="text" id="chat-input" placeholder="Ask about services, booking, editing, AI, or photography...">
+                    <input type="text" id="chat-input" placeholder="Ask me anything about my services..." />
                     <button id="send-button">Send</button>
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="section reveal-section">
-            <div class="section-header">
-                <span class="eyebrow">Contact</span>
-                <h2>Contact &amp; Socials</h2>
-                <p class="section-lead">Reach out directly for project discussion, quotations, collaborations, or social links.</p>
-            </div>
+        <section id="contact" class="section">
+            <h2>Contact & Socials</h2>
             <div class="contact-grid">
-                <a href="mailto:muhammad.moazzam635@gmail.com" class="contact-item glass-panel" target="_blank"><span class="icon">📧</span><span>Email</span></a>
-                <a href="https://www.instagram.com/mox.shots/" class="contact-item glass-panel" target="_blank"><span class="icon">📷</span><span>Instagram</span></a>
-                <a href="https://www.facebook.com/profile.php?id=61560097457858" class="contact-item glass-panel" target="_blank"><span class="icon">📘</span><span>Facebook</span></a>
-                <a href="https://www.linkedin.com/in/muhammad-moazzam-230143372/" class="contact-item glass-panel" target="_blank"><span class="icon">💼</span><span>LinkedIn</span></a>
+                <a href="mailto:muhammad.moazzam635@gmail.com" class="contact-item" target="_blank"><span class="icon">📧</span>Email</a>
+                <a href="https://www.instagram.com/mox.shots/" class="contact-item" target="_blank"><span class="icon">📷</span>Instagram</a>
+                <a href="https://www.facebook.com/profile.php?id=61560097457858" class="contact-item" target="_blank"><span class="icon">📘</span>Facebook</a>
+                <a href="https://www.linkedin.com/in/muhammad-moazzam-230143372/" class="contact-item" target="_blank"><span class="icon">💼</span>LinkedIn</a>
             </div>
+            <p>Visit my socials, or directly contact me through my E-mail.</p>
         </section>
     </main>
 
