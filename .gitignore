@@ -1,0 +1,49 @@
+# Environment variables
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Node/Vercel
+node_modules/
+.vercel/
+.next/
+
+# Package files (keep only source)
+my_agent/packages/
+my_agent/__pycache__/
+
+# Large media files (upload separately to Render)
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.psd
+*.zip
+Git-*.exe
+
+# Keep website images in source control
+!web2/*.jpg
+!web2/*.jpeg
+!web2/*.png
+!web2/*.gif
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: moazzam-ai-backend
+    runtime: python
+    pythonVersion: 3.11
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GOOGLE_API_KEY
+        scope: build,runtime
